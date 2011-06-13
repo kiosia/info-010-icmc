@@ -1,0 +1,5 @@
+	Implemente um sistema de controle de estoque que armazene produtos.
+	Considere que esse sistema será vendido e demais interessados podem estendê-lo, adicionando novos subtipos (ou extensões) de produto ao sistema.
+	A modelagem desse sistema deve considerar a existência de usuários que logam no sistema usando login e senha.
+	Cada usuário poderá ter um tipo diferente (administrador, com direitos totais; ou usuário, responsável por lançar baixas em estoque, ou seja, vendas realizadas).
+	A cada baixa no estoque, deve-se associar qual usuário realizou tal baixa. Implemente em C++ ou em Java.
