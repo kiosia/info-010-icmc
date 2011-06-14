@@ -17,7 +17,7 @@ public class Sistema {
 		// ao usuário
 	}
 	
-	public static User[] vUsers = null;
+	public static User[] vUsers = new User[5000];
 	public static int qttUsers = 0;
 	
 	/**
@@ -27,24 +27,36 @@ public class Sistema {
 	 */
 	public static User log(String username, String password){
 		User aux;
+		msg("User: "+username+" Pass: "+password );
 		for(int i=0;i<qttUsers;i++)
 		{
+			
 			aux = vUsers[i];
-			if((username==aux.getUsername())&&(password==aux.getPassword()))
-				return aux;
+			msg("User: "+aux.getUsername()+" Pass: "+aux.getPassword());
+			
+			if(username.equals(aux.getUsername()))
+			{
+				msg("Usuario existe!");
+				if(password.equals(aux.getPassword()))
+				{
+					msg("Senha correta!");
+					return aux;
+				}
+			}
+
 		}
 		return null;
 	}
 	
-//	/**
-//	 * Método para codificar a senha.
-//	 * (Ainda não implementada.)
-//	 * @param pass A senha original.
-//	 * @return A senha codificada. 
-//	 */
-//	private static String encode(String pass) {
-//		return pass;
-//	}
+	/**
+	 * Método para codificar a senha.
+	 * (Ainda não implementada.)
+	 * @param pass A senha original.
+	 * @return A senha codificada. 
+	 */
+	private static String encode(String pass) {
+		return pass;
+	}
 	
 	public static void msg(String message){
 		System.out.println(message);
@@ -61,9 +73,8 @@ public class Sistema {
 		msg("Ha "+qttUsers+" usuario(s) cadastrado(s)!");
 		if(qttUsers==0)
 		{ // se não existir nenhum usuário, cadastra o admin
-			User aux = new User("Administrador", "admin", "admin", true);
-			vUsers[qttUsers] = aux;
-			qttUsers++;
+			User aux = new User("Administrador", "admin", encode("admin"), true);
+			vUsers[qttUsers++] = aux;
 			System.out.println("Administrador criado! Username: admin Password: admin\n");
 			System.out.println("Troque sua senha assim que possivel!\n");
 		}
@@ -71,15 +82,17 @@ public class Sistema {
 		username = keyboard.next();
 		System.out.println("Digite sua senha:\n");
 		password = keyboard.next();
-		if(log(username, password)!=null)
+		if(log(username, encode(password))!=null)
 		{
 			int option = -1;
-			while(option!=3)
-			{
+			//while(option!=3)
+			//{
 				System.out.println("Sistema de estoque\n");
 				System.out.println("Sistema de estoque\n");
 				System.out.println("Sistema de estoque\n");
-			}
+			//}
 		}
+		else
+			msg("Usuario nao encontrado!\n");
 	}
 }
