@@ -38,10 +38,10 @@ public class User {
 	 * @param username define o login do usuário.
 	 * @param level define o nivel de privilégios do usuário.
 	 */
-	public User(String name, String password, String username, boolean adm) {
+	public User(String name, String username, String password, boolean adm) {
 		this.name = name;
-		this.password = password;
 		this.username = username;
+		this.password = password;
 		this.adm = adm;
 	}	
 	
