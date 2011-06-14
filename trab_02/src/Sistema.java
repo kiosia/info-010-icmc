@@ -17,33 +17,34 @@ public class Sistema {
 		// ao usuário
 	}
 	
-	public static User[] vUsers = new User[5000];
-	public static int qttUsers = 0;
 	
 	/**
-	 * Método que verifica se o usuário existe no vetor
-	 * de usuários.
+	 * TENTAR FAZER COM VECTOR!!!
+	 * VERIFICAR COMO FAZER DINÂMICO!!!
+	 */
+	public static User[] vUsers = new User[5000]; // vetor que guarda os usuários cadastrados no sistema;
+	public static int qttUsers = 0; // contador para a quantidade de usuários cadastrados no sistema;
+	
+	/**
+	 * Método que verifica se o usuário existe no vetor de usuários.
 	 * @return O usuário, caso exista, e null caso não exista.
 	 */
 	public static User log(String username, String password){
 		User aux;
-		msg("User: "+username+" Pass: "+password );
 		for(int i=0;i<qttUsers;i++)
 		{
-			
 			aux = vUsers[i];
-			msg("User: "+aux.getUsername()+" Pass: "+aux.getPassword());
-			
 			if(username.equals(aux.getUsername()))
 			{
-				msg("Usuario existe!");
 				if(password.equals(aux.getPassword()))
 				{
-					msg("Senha correta!");
 					return aux;
 				}
+				else
+					msg("Senha incorreta!");
 			}
-
+			else
+				msg("Este usuario nao existe!");
 		}
 		return null;
 	}
@@ -58,7 +59,11 @@ public class Sistema {
 		return pass;
 	}
 	
-	public static void msg(String message){
+	/**
+	 * Método da preguiça de escrever System.out.println() toda vez.
+	 * @param message A mensagem que se quer escrever na tela.
+	 */
+	public static void msg(String message) {
 		System.out.println(message);
 	}
 	
@@ -69,30 +74,23 @@ public class Sistema {
 		loadFiles();
 		Scanner keyboard = new Scanner(System.in);
 		String username, password;
-		System.out.println("Sistema de estoque\n");
-		msg("Ha "+qttUsers+" usuario(s) cadastrado(s)!");
+		msg("Sistema de estoque\n");
 		if(qttUsers==0)
 		{ // se não existir nenhum usuário, cadastra o admin
 			User aux = new User("Administrador", "admin", encode("admin"), true);
 			vUsers[qttUsers++] = aux;
-			System.out.println("Administrador criado! Username: admin Password: admin\n");
-			System.out.println("Troque sua senha assim que possivel!\n");
+			msg("Administrador criado! Username: admin Password: admin");
+			msg("Troque sua senha assim que possivel!");
 		}
-		System.out.println("Digite seu nome de usuario:\n");
+		msg("Digite seu nome de usuario:");
 		username = keyboard.next();
-		System.out.println("Digite sua senha:\n");
+		msg("Digite sua senha:");
 		password = keyboard.next();
 		if(log(username, encode(password))!=null)
-		{
-			int option = -1;
-			//while(option!=3)
-			//{
-				System.out.println("Sistema de estoque\n");
-				System.out.println("Sistema de estoque\n");
-				System.out.println("Sistema de estoque\n");
-			//}
-		}
-		else
-			msg("Usuario nao encontrado!\n");
+			mainMenu();
+	}
+
+	private static void mainMenu() {
+		msg("Sistema de estoque");
 	}
 }
