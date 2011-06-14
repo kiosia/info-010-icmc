@@ -17,7 +17,8 @@ public class Sistema {
 		// ao usuário
 	}
 	
-	public static Vector<User> vUsers;
+	public static User[] vUsers = null;
+	public static int qttUsers = 0;
 	
 	/**
 	 * Método que verifica se o usuário existe no vetor
@@ -26,23 +27,27 @@ public class Sistema {
 	 */
 	public static User log(String username, String password){
 		User aux;
-		for(int i=0;i<vUsers.size();i++)
+		for(int i=0;i<qttUsers;i++)
 		{
-			aux = vUsers.elementAt(i);
-			if((username==aux.getUsername())&&(encode(password)==aux.getPassword()))
+			aux = vUsers[i];
+			if((username==aux.getUsername())&&(password==aux.getPassword()))
 				return aux;
 		}
 		return null;
 	}
 	
-	/**
-	 * Método para codificar a senha.
-	 * (Ainda não implementada.)
-	 * @param pass A senha original.
-	 * @return A senha codificada. 
-	 */
-	private static String encode(String pass) {
-		return pass;
+//	/**
+//	 * Método para codificar a senha.
+//	 * (Ainda não implementada.)
+//	 * @param pass A senha original.
+//	 * @return A senha codificada. 
+//	 */
+//	private static String encode(String pass) {
+//		return pass;
+//	}
+	
+	public static void msg(String message){
+		System.out.println(message);
 	}
 	
 	/**
@@ -53,10 +58,12 @@ public class Sistema {
 		Scanner keyboard = new Scanner(System.in);
 		String username, password;
 		System.out.println("Sistema de estoque\n");
-		if(vUsers==null)
+		msg("Ha "+qttUsers+" usuario(s) cadastrado(s)!");
+		if(qttUsers==0)
 		{ // se não existir nenhum usuário, cadastra o admin
-			User aux = new User("Administrador", "admin", encode("admin"), true);
-			vUsers.add(aux);
+			User aux = new User("Administrador", "admin", "admin", true);
+			vUsers[qttUsers] = aux;
+			qttUsers++;
 			System.out.println("Administrador criado! Username: admin Password: admin\n");
 			System.out.println("Troque sua senha assim que possivel!\n");
 		}
