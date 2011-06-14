@@ -1,3 +1,5 @@
+CT2ac8rE2Tp2
+
 Para apagar os chars lidos do password
 http://www.rgagnon.com/javadetails/java-0375.html
 
