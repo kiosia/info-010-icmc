@@ -12,6 +12,7 @@ public class Sistema {
 	 */
 	public static void loadFiles() {
 		Scanner inFile;
+		String buffer;
 		File aux;
 		Class<?> c;
 		try
@@ -45,7 +46,7 @@ public class Sistema {
 		try
 		{
 			// arquivo de itens
-			aux = new File("itemList.txt"); 
+			aux = new File("itm.txt"); 
 			if (aux.exists())
 			{
 				inFile = new Scanner(aux);
@@ -56,6 +57,13 @@ public class Sistema {
 					itemType = inFile.nextLine();
 					c = Class.forName(itemType);
 					item = (Item) c.newInstance();
+					item.setCode(inFile.nextLine());
+					item.setName(inFile.nextLine());
+					item.setUnit(inFile.nextLine());
+					buffer = inFile.nextLine();
+					item.setPrice(Double.parseDouble(buffer));
+					buffer = inFile.nextLine();
+					item.setQtt(Integer.parseInt(buffer));
 					Item.vItens.add(item);
 				}
 				inFile.close();
@@ -68,12 +76,13 @@ public class Sistema {
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			System.err.println("Erro na leitura dos arquivos de itens!");
 		}
 		try
 		{	
 			// arquivo de transações
-			aux = new File("tranList.txt"); 
+			aux = new File("trn.txt"); 
 			if (aux.exists())
 			{
 				inFile = new Scanner(aux);
@@ -83,8 +92,11 @@ public class Sistema {
 				{
 					tranType = inFile.nextLine();
 					c = Class.forName(tranType);
-					System.out.println(c.getName());
 					tran = (Transaction) c.newInstance();
+					tran.setItemCode(inFile.nextLine());
+					tran.setUsername(inFile.nextLine());
+					buffer = inFile.nextLine();
+					tran.setQtt(Integer.parseInt(buffer));
 					Transaction.vTransactions.add(tran);
 				}
 				inFile.close();
@@ -106,7 +118,77 @@ public class Sistema {
 	 */
 	public static void saveFiles ()
 	{
-		// TODO Autao-generated method stub		
+		PrintWriter out;;
+		int i;
+		try
+		{
+			// arquivo de usuários
+			out  = new PrintWriter(new FileWriter("usr.txt"));
+			User user;
+			for(i=0;i<User.vUsers.size();i++)
+			{
+				user = User.vUsers.elementAt(i);
+				out.println(user.getName());
+				out.println(user.getUsername());
+				out.println(user.getPassword());
+				if(user.getAdm())
+					out.println("1");
+				else
+					out.println("0");
+			}
+			out.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println("Erro ao salvar arquivo de usuarios!");
+		}
+		
+		try
+		{
+			// arquivo de itens
+			out  = new PrintWriter(new FileWriter("itm.txt"));
+			Item item;
+			for(i=0;i<Item.vItens.size();i++)
+			{
+				item = Item.vItens.elementAt(i);
+				String itemType = item.getClass().getName();
+				out.println(itemType);
+				out.println(item.getCode());
+				out.println(item.getName());
+				out.println(item.getUnit());
+				out.println(item.getPrice());
+				out.println(item.getQtt());
+			}
+			out.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println("Erro ao salvar arquivo de itens!");
+		}
+		
+		
+		try
+		{
+			out  = new PrintWriter(new FileWriter("trn.txt"));
+			Transaction tran;
+			// arquivo de itens
+			for(i=0;i<Item.vItens.size();i++)
+			{
+				tran = Transaction.vTransactions.elementAt(i);
+				String tranType = tran.getClass().getName();
+				out.println(tranType);
+				out.println(tran.getUsername());
+				out.println(tran.getItemCode());
+				out.println(tran.getQtt());
+			}
+			out.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println("Erro ao salvar arquivo de itens!");
+		}
+		
+		
 	}
 	
 	/**
@@ -114,42 +196,6 @@ public class Sistema {
 	 */
 	private static Scanner keyboard = new Scanner(System.in);	
 	
-	/**
-	 * Inicia e roda o sistema.
-	 * @param args Vetor de argumentos passados via console
-	 */
-	public static void main(String[] args) {
-		loadFiles();
-		String username, password;
-		User aux; 
-		System.out.println("\nSistema STOC - Stoc: Transacoes de Objetos Colossais\n");
-		if(User.vUsers.size()==0) // se não existir nenhum usuário, cadastra o admin
-		{ 
-			aux = new User("Administrador", "admin", "admin", true, false);
-			System.out.println("Primeiro acesso!\nAdministrador criado!\nUsername: admin Password: admin");
-			System.out.println("Troque sua senha assim que possivel!\n");
-		}
-		while(true)
-		{
-			System.out.println("Digite seu nome de usuario: (digite SAIR para sair)");
-			username = keyboard.next();
-			if((username.equals("SAIR"))||(username.equals("sair")))
-			{
-				System.out.println("Obrigado por utilizar o STOC!");
-				saveFiles();
-				return;
-			}
-			System.out.println("Digite sua senha:");
-			password = keyboard.next();
-			aux = User.log(username, password); 
-			if(aux!=null)
-			{
-				mainMenu(aux);
-			}
-			saveFiles();
-		}
-	}
-
 	/**
 	 * Método que cria o menu principal e chama as funções necessárias conforme a escolha do usuário. 
 	 * @param logged O usuário que está logado.
@@ -253,4 +299,41 @@ public class Sistema {
 	private static void admProd(User logged) {
 		// TODO Auto-generated method stub
 	}
+
+	/**
+	 * Inicia e roda o sistema.
+	 * @param args Vetor de argumentos passados via console
+	 */
+	public static void main(String[] args) {
+		loadFiles();
+		String username, password;
+		User aux; 
+		System.out.println("\nSistema STOC - Stoc: Transacoes de Objetos Colossais\n");
+		if(User.vUsers.size()==0) // se não existir nenhum usuário, cadastra o admin
+		{ 
+			aux = new User("Administrador", "admin", "admin", true, false);
+			System.out.println("Primeiro acesso!\nAdministrador criado!\nUsername: admin Password: admin");
+			System.out.println("Troque sua senha assim que possivel!\n");
+		}
+		while(true)
+		{
+			System.out.println("Digite seu nome de usuario: (digite SAIR para sair)");
+			username = keyboard.next();
+			if((username.equals("SAIR"))||(username.equals("sair")))
+			{
+				System.out.println("Obrigado por utilizar o STOC!");
+				saveFiles();
+				return;
+			}
+			System.out.println("Digite sua senha:");
+			password = keyboard.next();
+			aux = User.log(username, password); 
+			if(aux!=null)
+			{
+				mainMenu(aux);
+			}
+			saveFiles();
+		}
+	}
+	
 }

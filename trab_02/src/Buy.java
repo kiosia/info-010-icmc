@@ -7,23 +7,25 @@
 public class Buy extends Transaction {
 
 	public Buy(){
-		loadFile();
+
 	}
 	
-	public Buy(User user, Item item, int qtt) {
-		super(user, item, qtt);
+	public Buy(String username, String itemCode, int qtt) {
+		super(username, itemCode, qtt);
 	}
 	
 	@Override
 	public void execute() {
+		Item item = Item.findItem(this.itemCode);
 		int oldQtt = item.getQtt();
 		item.setQtt(oldQtt+this.qtt);
 	}
 
 	@Override
-	public void loadFile() {
+	public void printTransaction() {
 		// TODO Auto-generated method stub
-		System.out.println("Carregando compras!");
+		System.out.println(this.username+" comprou "+this.qtt+" unidades do produto de codigo "+this.itemCode);
+		
 	}
-
+	
 }

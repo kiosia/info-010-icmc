@@ -62,7 +62,6 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.adm = adm;
-		vUsers.add(this);
 	}
 	
 	/**
@@ -89,6 +88,14 @@ public class User {
 		return username;
 	}
 
+	/**
+	 * Getter para o password.
+	 * @return String que contém o password do usuário em questão.
+	 */
+	public String getPassword() {
+		return this.password;
+	}	
+	
 	/**
 	 * Getter para adm.
 	 * @return Variável do tipo boolean que contém o adm do usuário em questão. 
@@ -118,7 +125,7 @@ public class User {
 			pass2 = keyboard.next();
 			if(pass.equals(pass2))
 			{
-				this.password = pass;
+				this.password = encode(pass);
 				System.out.println("Senha alterada com sucesso!");
 			}
 			else
@@ -131,6 +138,9 @@ public class User {
 	/**
 	 * Método para codificar a senha.
 	 * Fonte: http://codare.net/2007/02/02/java-gerando-codigos-hash-md5-sha/
+	 * A principio, esta codificação é inútil, visto que o usuário tem acesso ao arquivo,
+	 * podendo assim, trocar seu status de adm ou mesmo a sua senha codificada pela do
+	 * administrador, mas como o tempo é curto, vou deixar assim mesmo.
 	 * @param pass A senha original.
 	 * @return A senha codificada. 
 	 */
@@ -194,6 +204,4 @@ public class User {
 			System.out.println("Usuario nao encontrado!");
 			return null;
 		}
-
-
 }

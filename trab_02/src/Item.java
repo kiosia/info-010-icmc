@@ -9,13 +9,13 @@ import java.util.Vector;
 public abstract class Item {
 
 	/**
-	 * Define o nome do item.
-	 */
-	private String name;
-	/**
 	 * Define o código do item.
 	 */
 	private String code;
+	/**
+	 * Define o nome do item.
+	 */
+	private String name;
 	/**
 	 * Define a unidade de medida com a qual o item é estocado.
 	 */
@@ -31,17 +31,21 @@ public abstract class Item {
 
 	public static Vector<Item> vItens = new Vector<Item>();
 	
+	public Item(){
+		
+	}
+	
 	/**
 	 * Construtor que recebe como parâmetros todos os campos. 
-	 * @param name Define o nome do item.
 	 * @param code Define o código do item.
+	 * @param name Define o nome do item.
 	 * @param unit Define a unidade de medida do item.
 	 * @param price Define o preço do item.
 	 * @param qtt Define a quantiade do item em estoque.
 	 */
-	public Item(String name, String code, String unit, double price, int qtt) {
-		this.name = name;
+	public Item(String code, String name, String unit, double price, int qtt) {
 		this.code = code;
+		this.name = name;
 		this.unit = unit;
 		this.price = price;
 		this.qtt = qtt;
@@ -51,12 +55,24 @@ public abstract class Item {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getCode() {
 		return code;
 	}
 
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
 	public String getUnit() {
 		return unit;
+	}
+	
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public void setPrice(double price) {
@@ -75,6 +91,10 @@ public abstract class Item {
 		return qtt;
 	}
 
+	public void printItem(){
+		System.out.println(code+" "+name+" "+unit+" "+price+" "+qtt);
+	}
+	
 	/**
 	 * Método que procura por um item no vetor de itens.
 	 * @param itemID O código do item que se quer procurar.
@@ -91,10 +111,4 @@ public abstract class Item {
 		System.out.println("Item nao encontrado!");
 		return null;
 	}
-	
-	/**
-	 * Método virtual para carregar o arquivo do tipo de item específico.
-	 */
-	public abstract void loadFile();
-
 }

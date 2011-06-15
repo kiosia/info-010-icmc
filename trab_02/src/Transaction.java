@@ -10,11 +10,11 @@ public abstract class Transaction {
 /**
  * Define o usuário responsável pela transação
  */
-	public User user;
+	public String username;
 /**
  * Define o item envolvido na transação.
  */
-	public Item item;
+	public String itemCode;
 /**
  * Define a quantidade de itens envolvidos na transação.	
  */
@@ -37,9 +37,44 @@ public abstract class Transaction {
 	 * @param item Define o item que será vendido.
 	 * @param qtt Define a quantidade de itens envolvidos na transação. 
 	 */
-	public Transaction(User user, Item item, int qtt) {
-		this.user = user;
-		this.item = item;
+	public Transaction(String user, String item, int qtt) {
+		this.username = user;
+		this.itemCode = item;
+		this.qtt = qtt;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return the itemCode
+	 */
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	/**
+	 * @param itemCode the itemCode to set
+	 */
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	/**
+	 * @param qtt the qtt to set
+	 */
+	public void setQtt(int qtt) {
 		this.qtt = qtt;
 	}
 
@@ -48,7 +83,7 @@ public abstract class Transaction {
 	 * @return Objeto do tipo Item envolvido na transação. 
 	 */
 	public Item getItem() {
-		return item;
+		return Item.findItem(this.itemCode);
 	}
 
 	/**
@@ -64,26 +99,19 @@ public abstract class Transaction {
 	 * @return Objeto do tipo User envolvido na transação.
 	 */
 	public User getUser(){
-		return this.user;
+		return User.findUser(this.username);
 	}
 
 	/**
-	 * Método que imprime na tela os dados da transação em questão.
-	 */
-	public void printTransaction(){
-		// TODO Auto-generated method stub
-	}
-	
-	/**
 	 * Método que procura todas as transações relacionadas ao usuário recebido por parâmetro.
-	 * @param user Objeto do tipo User pelo qual se quer pesquisar nas transações.
+	 * @param username Objeto do tipo User pelo qual se quer pesquisar nas transações.
 	 * @return Variável do tipo int que indica a quantidade de transações encontradas. 
 	 */	
-	public static int listByUser(User user) {
+	public static int listByUser(String username) {
 		int qtt = 0;
 		for(int i=0;i<vTransactions.size();i++)
 		{
-			if(vTransactions.get(i).user == user)
+			if(vTransactions.get(i).username == username)
 			{
 				vTransactions.get(i).printTransaction();
 				qtt++;
@@ -95,14 +123,14 @@ public abstract class Transaction {
 	
 	/**
 	 * Método que procura todas as transações relacionadas ao item recebido por parâmetro.
-	 * @param item Objeto do tipo Item pelo qual se quer pesquisar nas transações.
+	 * @param itemCode Objeto do tipo Item pelo qual se quer pesquisar nas transações.
 	 * @return Variável do tipo int que indica a quantidade de transações encontradas. 
 	 */
-	public static int listByItem(Item item) {
+	public static int listByItem(String itemCode) {
 		int qtt = 0;
 		for(int i=0;i<vTransactions.size();i++)
 		{
-			if(vTransactions.get(i).item == item)
+			if(vTransactions.get(i).itemCode == itemCode)
 			{
 				vTransactions.get(i).printTransaction();
 				qtt++;
@@ -118,8 +146,8 @@ public abstract class Transaction {
 	public abstract void execute();
 	
 	/**
-	 * Método virtual para carregar o arquivo da transação específica.
+	 * Método virtual que imprime na tela os dados da transação em questão.
 	 */
-	public abstract void loadFile();
-
+	public abstract void printTransaction();
+	
 }
