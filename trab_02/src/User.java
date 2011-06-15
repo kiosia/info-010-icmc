@@ -46,7 +46,7 @@ public class User {
 	}	
 	
 	/**
-	 * Construtor para carregar do arquivo.
+	 * Construtor que recebe todos os campos mais um parâmetro que indica se o password deve ser criptografado.
 	 * @param name define o nome real do usuário.
 	 * @param password define a senha do usuário.
 	 * @param username define o login do usuário.
@@ -58,20 +58,12 @@ public class User {
 		{
 			password = encode(password);
 		}
-		this.setName(name);
+		this.name = name;
 		this.username = username;
 		this.password = password;
 		this.adm = adm;
 	}
 	
-	/**
-	 * Setter para o nome.
-	 * @param name O novo nome.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	/**
 	 * Getter para o nome.
 	 * @return String que contém o nome do usuário em questão.
@@ -204,4 +196,47 @@ public class User {
 			System.out.println("Usuario nao encontrado!");
 			return null;
 		}
+
+	/**
+	 * Método que imprime na tela os dados de todos os usuários.
+	 */
+	public static void printAll() {
+		for(User u: vUsers)
+			u.print();
+		System.out.println("Existe(m) "+vUsers.size()+" usuario(s)!");
+	}
+
+	/**
+	 * Método que imprime na tela os dados do usuário em questão.
+	 */
+	private void print() {
+		System.out.println("Nome: "+this.name+"Username: "+this.username+" Adm:"+this.adm);
+	}
+
+	/**
+	 * Método que coleta dados e altera o status de adm de um usuário.
+	 */
+	public static void edtAdm() {
+		// TODO edtAdm() Método que coleta dados e altera o status de adm de um usuário.
+		
+	}
+
+	/**
+	 * Método que coleta dados e adiciona um usuário.
+	 */
+	public static void addUser() {
+		// TODO addUser() Método que coleta dados e adiciona um usuário.
+		
+	}
+
+	/**
+	 * Método que coleta dados e remove um usuário.
+	 * As transações relacionadas a este usuário podem ser apagadas
+	 * do sistema ou transferidas para outro usuário, a cargo do
+	 * reponsável pela exclusão.
+	 */
+	public static void delUser() {
+		// TODO delUser() Método que coleta dados e remove um usuário.
+		
+	}
 }

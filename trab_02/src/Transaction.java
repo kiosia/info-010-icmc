@@ -7,29 +7,31 @@ import java.util.Vector;
  * @since 22/05/2011
  */
 public abstract class Transaction {
-/**
- * Define o usuário responsável pela transação
- */
+
+	/**
+	 * Define o usuário responsável pela transação
+	 */
 	public String username;
-/**
- * Define o item envolvido na transação.
- */
+
+	/**
+	 * Define o item envolvido na transação.
+	 */
 	public String itemCode;
-/**
- * Define a quantidade de itens envolvidos na transação.	
- */
+
+	/**
+	 * Define a quantidade de itens envolvidos na transação.	
+	 */
 	public int qtt;
-/**
- * Vetor que contém as transações. 
- */
-	public static Vector<Transaction> vTransactions = new Vector<Transaction>();	
+
+	/**
+	 * Vetor que contém as transações. 
+	 */
+	public static Vector<Transaction> vTransactions = new Vector<Transaction>();
 	
 	/**
 	 * Construtor vazio
 	 */
-	public Transaction() {
-
-	}
+	public Transaction() {}
 	
 	/**
 	 * Construtor que recebe todos os atributos.
@@ -44,35 +46,40 @@ public abstract class Transaction {
 	}
 
 	/**
-	 * @return the username
+	 * Getter para o username.
+	 * @return Objeto do tipo String que contém o username.
 	 */
 	public String getUsername() {
 		return username;
 	}
 
 	/**
-	 * @param username the username to set
+	 * Setter para o username.
+	 * @param username Objeto do tipo String que contém o novo username.
 	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
 	/**
-	 * @return the itemCode
+	 * Getter para o código do item.
+	 * @return Objeto do tipo String que contém o código do item.
 	 */
 	public String getItemCode() {
 		return itemCode;
 	}
 
 	/**
-	 * @param itemCode the itemCode to set
+	 * Setter para o código do item.
+	 * @param itemCode Objeto do tipo String que contém o novo código do item.
 	 */
 	public void setItemCode(String itemCode) {
 		this.itemCode = itemCode;
 	}
 
 	/**
-	 * @param qtt the qtt to set
+	 * Setter para a quantidade envolvida na transação.
+	 * @param qtt Variável do tipo int que contém a nova quantidade.
 	 */
 	public void setQtt(int qtt) {
 		this.qtt = qtt;
@@ -128,16 +135,25 @@ public abstract class Transaction {
 	 */
 	public static int listByItem(String itemCode) {
 		int qtt = 0;
-		for(int i=0;i<vTransactions.size();i++)
+		for(Transaction t: vTransactions)
 		{
-			if(vTransactions.get(i).itemCode == itemCode)
+			if(t.itemCode == itemCode)
 			{
-				vTransactions.get(i).printTransaction();
+				t.printTransaction();
 				qtt++;
 			}
 		}
 		System.out.println("Existe(m) "+qtt+" transacao(oes) para este item!");
 		return qtt;
+	}
+
+	/**
+	 * Método que imprime todas as transações efetuadas.
+	 */
+	public static void printAll() {
+		for(Transaction t: vTransactions)
+			t.printTransaction();
+		System.out.println("Existe(m) "+vTransactions.size()+" transacao(oes)!");
 	}
 	
 	/**

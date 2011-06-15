@@ -2,11 +2,11 @@ import java.util.*;
 import java.io.*;
 
 /**
- * Classe que define o sistema.
+ * Classe abstrata que define o sistema. Não podem haver objetos instanciados desta classe.
  * @author Aléxis Kiosia (7152097)
  * @since 21/05/2011
  */
-public class Sistema {
+public abstract class Sistema {
 	/**
 	 * Método que carrega e/ou cria os arquivos relacionados ao sistema.
 	 */
@@ -14,6 +14,7 @@ public class Sistema {
 		Scanner inFile;
 		String buffer;
 		File aux;
+		boolean newSystem = false;
 		Class<?> c;
 		try
 		{
@@ -35,8 +36,9 @@ public class Sistema {
 			}
 			else
 			{
-					aux.createNewFile();
-					System.out.println("Arquivo de usuarios criado!");
+				aux.createNewFile();
+				newSystem = true; // Se não houver arquivo de usuários, o sistema está comprometido. Refaz-se TODOS os arquivos.
+				System.out.println("Arquivo de usuarios criado!");
 			}
 		}
 		catch (Exception e)
@@ -47,7 +49,7 @@ public class Sistema {
 		{
 			// arquivo de itens
 			aux = new File("itm.txt"); 
-			if (aux.exists())
+			if((aux.exists())&&(!newSystem))
 			{
 				inFile = new Scanner(aux);
 				Item item;
@@ -80,10 +82,10 @@ public class Sistema {
 			System.err.println("Erro na leitura dos arquivos de itens!");
 		}
 		try
-		{	
+		{
 			// arquivo de transações
 			aux = new File("trn.txt"); 
-			if (aux.exists())
+			if((aux.exists())&&(!newSystem))
 			{
 				inFile = new Scanner(aux);
 				Transaction tran;
@@ -93,8 +95,8 @@ public class Sistema {
 					tranType = inFile.nextLine();
 					c = Class.forName(tranType);
 					tran = (Transaction) c.newInstance();
-					tran.setItemCode(inFile.nextLine());
 					tran.setUsername(inFile.nextLine());
+					tran.setItemCode(inFile.nextLine());
 					buffer = inFile.nextLine();
 					tran.setQtt(Integer.parseInt(buffer));
 					Transaction.vTransactions.add(tran);
@@ -119,15 +121,12 @@ public class Sistema {
 	public static void saveFiles ()
 	{
 		PrintWriter out;;
-		int i;
 		try
 		{
 			// arquivo de usuários
 			out  = new PrintWriter(new FileWriter("usr.txt"));
-			User user;
-			for(i=0;i<User.vUsers.size();i++)
+			for(User user: User.vUsers)
 			{
-				user = User.vUsers.elementAt(i);
 				out.println(user.getName());
 				out.println(user.getUsername());
 				out.println(user.getPassword());
@@ -142,15 +141,12 @@ public class Sistema {
 		{
 			System.err.println("Erro ao salvar arquivo de usuarios!");
 		}
-		
 		try
 		{
 			// arquivo de itens
 			out  = new PrintWriter(new FileWriter("itm.txt"));
-			Item item;
-			for(i=0;i<Item.vItens.size();i++)
+			for(Item item: Item.vItens)
 			{
-				item = Item.vItens.elementAt(i);
 				String itemType = item.getClass().getName();
 				out.println(itemType);
 				out.println(item.getCode());
@@ -165,16 +161,12 @@ public class Sistema {
 		{
 			System.err.println("Erro ao salvar arquivo de itens!");
 		}
-		
-		
 		try
 		{
 			out  = new PrintWriter(new FileWriter("trn.txt"));
-			Transaction tran;
 			// arquivo de itens
-			for(i=0;i<Item.vItens.size();i++)
+			for(Transaction tran: Transaction.vTransactions)
 			{
-				tran = Transaction.vTransactions.elementAt(i);
 				String tranType = tran.getClass().getName();
 				out.println(tranType);
 				out.println(tran.getUsername());
@@ -185,10 +177,8 @@ public class Sistema {
 		}
 		catch (Exception e)
 		{
-			System.err.println("Erro ao salvar arquivo de itens!");
+			System.err.println("Erro ao salvar arquivo de transacoes!");
 		}
-		
-		
 	}
 	
 	/**
@@ -272,7 +262,40 @@ public class Sistema {
 	 * @param logged O usuário que está logado.
 	 */
 	private static void admReport(User logged) {
-		// TODO Auto-generated method stub
+		int opt = 0;
+		while(opt!=5)
+		{
+			System.out.println("1 - Verificar produtos cadastrados");
+			System.out.println("2 - Verificar transacoes efetuadas");
+			System.out.println("3 - Verificar transacoes efetuadas por usuario");
+			System.out.println("4 - Verificar transacoes efetuadas por item");
+			System.out.println("5 - Voltar");
+			opt = keyboard.nextInt();
+			switch(opt)
+			{
+				case 1 :
+					Item.printAll();
+					break;
+				case 2 :
+					Transaction.printAll();
+					break;
+				case 3 :
+					System.out.println("Digite o username do usuario:");
+					String user = keyboard.nextLine();
+					Transaction.listByUser(user);
+					break;
+				case 4 :
+					System.out.println("Digite o codigo do produto:");
+					String item = keyboard.nextLine();
+					Transaction.listByItem(item);
+					break;
+				case 5 :
+					break;
+				default :
+					System.out.println("Opcao invalida!");
+			}
+		}
+		
 	}
 
 	/**
@@ -280,8 +303,39 @@ public class Sistema {
 	 * @param logged O usuário que está logado.
 	 */
 	private static void admUser(User logged) {
-		// TODO Auto-generated method stub
-		logged.edtPass();
+		int opt = 0;
+		while(opt!=6)
+		{
+			System.out.println("1 - Alterar a senha");
+			System.out.println("2 - Cadastrar novo usuario");
+			System.out.println("3 - Excluir um usuario");
+			System.out.println("4 - Editar administradores");
+			System.out.println("5 - Exibir usuarios");
+			System.out.println("6 - Voltar");
+			opt = keyboard.nextInt();
+			switch(opt)
+			{
+				case 1 :
+					logged.edtPass();
+					break;
+				case 2 :
+					User.addUser();
+					break;
+				case 3 :
+					User.delUser();
+					break;
+				case 4 :
+					User.edtAdm();
+					break;
+				case 5 :
+					User.printAll();
+					break;
+				case 6 :
+					break;
+				default :
+					System.out.println("Opcao invalida!");
+			}
+		}
 	}
 
 	/**
@@ -289,7 +343,43 @@ public class Sistema {
 	 * @param logged O usuário que está logado.
 	 */
 	private static void manProd(User logged) {
-		// TODO Auto-generated method stub
+		int opt = 0;
+		String item;
+		Transaction t;
+		int qtt;
+		do
+		{
+			keyboard.nextLine();
+			System.out.println("Digite o codigo do produto:");
+			item = keyboard.nextLine();
+			System.out.println("Digite a quantidade envolvida na transacao:");
+			qtt = keyboard.nextInt();
+		} while(Item.findItem(item)==null);
+		
+		while(opt!=3)
+		{
+			System.out.println("Voce quer...");
+			System.out.println("1 - Vender o produto?");
+			System.out.println("2 - Comprar o produto?");
+			System.out.println("3 - Voltar?");
+			opt = keyboard.nextInt();
+			switch(opt)
+			{
+				case 1 :
+					t = new Sell(logged.getUsername(), item, qtt);
+					t.execute();
+					return;
+				case 2 :
+					t = new Buy(logged.getUsername(), item, qtt);
+					t.execute();
+					return;
+				case 3 :
+					break;
+				default :
+					System.out.println("Opcao invalida!");
+			}
+		}
+		
 	}
 	
 	/**
@@ -297,7 +387,7 @@ public class Sistema {
 	 * @param logged O usuário que está logado.
 	 */
 	private static void admProd(User logged) {
-		// TODO Auto-generated method stub
+		// TODO admProd Método que cria o menu para manutenção e gerenciamento de produtos e chama as funções necessárias conforme a escolha do usuário.
 	}
 
 	/**

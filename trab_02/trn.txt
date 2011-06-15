@@ -1,0 +1,16 @@
+Sell
+kiosia
+PPA4
+30
+Buy
+admin
+PPA4
+20
+Sell
+kiosia
+PPA4
+2
+Sell
+kiosia
+CAD2
+12
