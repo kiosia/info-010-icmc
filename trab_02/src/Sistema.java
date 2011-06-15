@@ -7,10 +7,16 @@ import java.io.*;
  * @since 21/05/2011
  */
 public abstract class Sistema {
+
+	/**
+	 * Construtor vazio.
+	 */
+	public Sistema(){}
+	
 	/**
 	 * Método que carrega e/ou cria os arquivos relacionados ao sistema.
 	 */
-	public static void loadFiles() {
+ 	public static void loadFiles() {
 		Scanner inFile;
 		String buffer;
 		File aux;
@@ -197,27 +203,31 @@ public abstract class Sistema {
 		{
 			while(opt!=4)
 			{
-				System.out.println("1 - Gerenciar produtos");
-				System.out.println("2 - Gerenciar usuarios");
-				System.out.println("3 - Gerar relatorios");
-				System.out.println("4 - Logout");
-				System.out.println("5 - Sair");
+				System.out.println("1 - Transacoes");
+				System.out.println("2 - Gerenciar produtos");
+				System.out.println("3 - Gerenciar usuarios");
+				System.out.println("4 - Gerar relatorios");
+				System.out.println("5 - Logout");
+				System.out.println("6 - Sair");
 				opt = keyboard.nextInt();
 				switch(opt)
 				{
-					case 1 :
-						admProd(logged);
+					case 1:
+						manProd(logged);
 						break;
 					case 2 :
-						admUser(logged);
+						admProd(logged);
 						break;
 					case 3 :
-						admReport(logged);
+						admUser(logged);
 						break;
 					case 4 :
-						System.out.println("Usuario "+logged.getUsername()+" deslogando...");
+						admReport(logged);
 						break;
 					case 5 :
+						System.out.println("Usuario "+logged.getUsername()+" deslogando...");
+						break;
+					case 6 :
 						System.out.println("Obrigado por utilizar o STOC!");
 						saveFiles();
 						System.exit(0);
@@ -299,7 +309,7 @@ public abstract class Sistema {
 	}
 
 	/**
-	 * Método que cria o menu para manutenção e gerenciamento de usuários e chama as funções necessárias conforme a escolha do usuário.
+	 * Método que cria o menu para manutenção de usuários e chama as funções necessárias conforme a escolha do usuário.
 	 * @param logged O usuário que está logado.
 	 */
 	private static void admUser(User logged) {
@@ -383,11 +393,13 @@ public abstract class Sistema {
 	}
 	
 	/**
-	 * Método que cria o menu para manutenção e gerenciamento de produtos e chama as funções necessárias conforme a escolha do usuário.
+	 * Método que cria o menu para manutenção e produtos e chama as funções necessárias conforme a escolha do usuário.
 	 * @param logged O usuário que está logado.
 	 */
 	private static void admProd(User logged) {
-		// TODO admProd Método que cria o menu para manutenção e gerenciamento de produtos e chama as funções necessárias conforme a escolha do usuário.
+		// TODO addItem() Adiciona item
+		// TODO delItem() Remove item (ao remover, todas as transações relacionadas são apagadas)
+		// TODO edtItem() Edita item (pode-se mudar o nome ou o preço)
 	}
 
 	/**
@@ -427,3 +439,6 @@ public abstract class Sistema {
 	}
 	
 }
+
+// TODO arrumar os loadFile() e saveFile() para aceitar qualquer tipo de Item.
+// vai ter que fazer métodos abstratos em Item para carregar cada tipo de Item.
