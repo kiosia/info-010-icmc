@@ -322,10 +322,10 @@ public abstract class Sistema {
 					User.addUser();
 					break;
 				case 3 :
-					User.delUser();
+					User.delUser(logged);
 					break;
 				case 4 :
-					User.edtAdm();
+					User.edtAdm(logged);
 					break;
 				case 5 :
 					User.printAll();

@@ -97,6 +97,14 @@ public class User {
 	}
 
 	/**
+	 * Setter para adm.
+	 * @param adm Variável do tipo boolean que contém o novo adm. 
+	 */
+	private void setAdm(boolean adm) {
+		this.adm = adm;
+	}	
+	
+	/**
 	 * Método para trocar o password do usuário.
 	 */
 	public void edtPass() {
@@ -210,33 +218,97 @@ public class User {
 	 * Método que imprime na tela os dados do usuário em questão.
 	 */
 	private void print() {
-		System.out.println("Nome: "+this.name+"Username: "+this.username+" Adm:"+this.adm);
+		System.out.println("Nome: "+this.name+" Username: "+this.username+" Adm:"+this.adm);
 	}
 
 	/**
 	 * Método que coleta dados e altera o status de adm de um usuário.
+	 * @param logged Objeto que representa o usuário que está logado.
 	 */
-	public static void edtAdm() {
-		// TODO edtAdm() Método que coleta dados e altera o status de adm de um usuário.
-		
+	public static void edtAdm(User logged) {
+		System.out.println("Digite o username do usuario a ser alterado:");
+		User u = User.findUser(keyboard.nextLine());
+		if(logged.username.equals(u.getUsername()))
+		{
+			System.out.println("Impossivel alterar: usuario logado");
+			return;
+		}
+		if(u!=null)
+		{
+			String opt;
+			if(u.getAdm())
+			{
+				System.out.println("Usuario atualmente eh admin. Deseja mudar?(S/N)");
+				opt = keyboard.nextLine(); 
+				if((opt.equals("s"))||(opt.equals("S")))
+				{
+					u.setAdm(false);
+				}
+			}
+			else
+			{
+				System.out.println("Usuario atualmente nao eh admin. Deseja mudar?(S/N)");
+				opt = keyboard.nextLine(); 
+				if((opt.equals("s"))||(opt.equals("S")))
+				{
+					u.setAdm(true);
+				}
+			}
+		}
 	}
 
 	/**
 	 * Método que coleta dados e adiciona um usuário.
 	 */
 	public static void addUser() {
-		// TODO addUser() Método que coleta dados e adiciona um usuário.
-		
+		String name, username, password;
+		int opt;
+		boolean adm;
+		System.out.println("Digite o nome do usuario:");
+		name = keyboard.nextLine();
+		System.out.println("Digite o username do usuario:");
+		username = keyboard.nextLine();
+		System.out.println("Digite o password do usuario:");
+		password = keyboard.nextLine();
+		System.out.println("Digite 1 para criar um administrador e 0 para criar um usuario:");
+		opt = keyboard.nextInt();
+		if(opt==1)
+			adm = true; 
+		else
+			adm = false;
+		User u = new User(name, username, password, adm, false);
+		vUsers.add(u);
 	}
 
 	/**
 	 * Método que coleta dados e remove um usuário.
-	 * As transações relacionadas a este usuário podem ser apagadas
-	 * do sistema ou transferidas para outro usuário, a cargo do
-	 * reponsável pela exclusão.
+	 * As transações relacionadas a este usuário são transferidas
+	 * ao responsável pela exclusao.
+	 * @param logged Objeto que representa o usuário que está logado.
 	 */
-	public static void delUser() {
-		// TODO delUser() Método que coleta dados e remove um usuário.
-		
+	public static void delUser(User logged) {
+		String username, opt;
+		System.out.println("Digite o username do usuario que deseja excluir:");
+		username = keyboard.nextLine();
+		if(logged.username.equals(username))
+		{
+			System.out.println("Impossivel excluir: usuario logado");
+			return;
+		}
+		User u = User.findUser(username);
+		if(u!=null)
+		{
+			System.out.println("As transacoes relacionadas a este usuario irao para o seu nome. Deseja continuar?(S/N)");
+			opt = keyboard.nextLine();
+			if(opt.toUpperCase().equals("S"))
+			{
+				for(Transaction t: Transaction.vTransactions)
+					if(t.getUsername().equals(username))
+						t.setUsername(username);
+				vUsers.remove(u);
+				System.out.println("Usuario excluido com sucesso!");
+			}
+		}
 	}
+
 }

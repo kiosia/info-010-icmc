@@ -5,14 +5,26 @@
  */
 public class Buy extends Transaction {
 
+	/**
+	 * Construtor vazio.
+	 */
 	public Buy(){
 
 	}
 	
+	/**
+	 * Construtor que recebe todos os atributos por parâmetro.
+	 * @param username Objeto do tipo String que representa o username do usuário que realizou a compra.
+	 * @param itemCode Objeto do tipo String que representa o código do item que foi comprado.
+	 * @param qtt Variável do tipo int que representa quantidade que foi comprada.
+	 */
 	public Buy(String username, String itemCode, int qtt) {
 		super(username, itemCode, qtt);
 	}
 	
+	/**
+	 * Método que executa a venda.
+	 */
 	@Override
 	public void execute() {
 		Item item = Item.findItem(this.itemCode);
@@ -21,6 +33,9 @@ public class Buy extends Transaction {
 		vTransactions.add(this);
 	}
 
+	/**
+	 * Método que imprime a transação de venda.
+	 */
 	@Override
 	public void printTransaction() {
 		System.out.println(this.username+" comprou "+this.qtt+" unidades do produto de codigo "+this.itemCode);
@@ -28,5 +43,3 @@ public class Buy extends Transaction {
 	}
 
 }
-
-// TODO comentar a classe Buy
