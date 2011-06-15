@@ -1,8 +1,9 @@
 import java.util.Vector;
 
 /**
- * Classe que define uma transação.
- * @author Aléxis Kiosia
+ * Classe abstrata que define uma transação.
+ * Toda classe de transação a ser reconhecida pelo sistema deve herdar a partir desta classe.
+ * @author Aléxis Kiosia (7152097)
  * @since 22/05/2011
  */
 public abstract class Transaction {
@@ -66,6 +67,9 @@ public abstract class Transaction {
 		return this.user;
 	}
 
+	/**
+	 * Método que imprime na tela os dados da transação em questão.
+	 */
 	public void printTransaction(){
 		// TODO Auto-generated method stub
 	}

@@ -1,8 +1,8 @@
 import java.util.Vector;
 
 /**
- * Classe que define as bases para os itens que irão compor o estoque.
- * Toda classe de item a ser cadastrado no sistema deve herdar a partir desta classe. 
+ * Classe abstrata que os itens que irão compor o estoque.
+ * Toda classe de item a ser reconhecida pelo sistema deve herdar a partir desta classe. 
  * @author Aléxis Kiosia (7152097)
  * @since 22/05/2011
  */

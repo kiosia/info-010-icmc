@@ -1,9 +1,8 @@
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
-import java.util.Vector;
+import java.security.*;
+import java.util.*;
 
 /**
+ * Classe que define os usuários do sistema.
  * @author Aléxis Kiosia (7152097)
  * @since 21/05/2011
  */
@@ -34,7 +33,7 @@ public class User {
 	/**
 	 * Variável para leitura do teclado.
 	 */
-	private static Scanner k = new Scanner(System.in);
+	private static Scanner keyboard = new Scanner(System.in);
 	
 	/**
 	 * Construtor para usuários que estão tentando logar no sistema.
@@ -51,7 +50,7 @@ public class User {
 	 * @param name define o nome real do usuário.
 	 * @param password define a senha do usuário.
 	 * @param username define o login do usuário.
-	 * @param level define o nivel de privilégios do usuário.
+	 * @param adm define se o usuário é administrador ou não.
 	 * @param fromFile define se o password veio do arquivo, ou seja, já está criptografado.
 	 */
 	public User(String name, String username, String password, boolean adm, boolean fromFile) {
@@ -59,41 +58,41 @@ public class User {
 		{
 			password = encode(password);
 		}
-		this.name = name;
+		this.setName(name);
 		this.username = username;
 		this.password = password;
 		this.adm = adm;
 		vUsers.add(this);
 	}
 	
-	public String getName() {
-		return name;
-	}
-
+	/**
+	 * Setter para o nome.
+	 * @param name O novo nome.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getPassword() {
-		return this.password;
-	}	
-	
-	public void setPassword(String password) {
-		this.password = encode(password);
+	/**
+	 * Getter para o nome.
+	 * @return String que contém o nome do usuário em questão.
+	 */
+	public String getName() {
+		return name;
 	}
 
+	/**
+	 * Getter para o username.
+	 * @return String que contém o username do usuário em questão.
+	 */
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public void setAdm(boolean adm) {
-		this.adm = adm;
-	}
-
+	/**
+	 * Getter para adm.
+	 * @return Variável do tipo boolean que contém o adm do usuário em questão. 
+	 */
 	public boolean getAdm() {
 		return adm;
 	}
@@ -104,7 +103,7 @@ public class User {
 	public void edtPass() {
 		String pass, pass2;
 		System.out.println("Digite sua senha atual:");
-		pass = k.next();
+		pass = keyboard.next();
 		pass = User.encode(pass);
 		if(!pass.equals(password))
 		{
@@ -114,12 +113,12 @@ public class User {
 		else
 		{
 			System.out.println("Digite sua nova senha:");
-			pass = k.next();
+			pass = keyboard.next();
 			System.out.println("Digite novamente:");
-			pass2 = k.next();
+			pass2 = keyboard.next();
 			if(pass.equals(pass2))
 			{
-				setPassword(pass);
+				this.password = pass;
 				System.out.println("Senha alterada com sucesso!");
 			}
 			else
@@ -194,6 +193,7 @@ public class User {
 			}
 			System.out.println("Usuario nao encontrado!");
 			return null;
-		}	
+		}
+
 
 }

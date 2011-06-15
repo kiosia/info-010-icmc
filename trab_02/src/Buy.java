@@ -1,6 +1,6 @@
 /**
  * Classe que implementa a transação de compra.
- * @author Kiosia
+ * @author Aléxis Kiosia (7152097)
  * @since 30/05/2011
  */
 

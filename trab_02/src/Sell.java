@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 /**
  * Classe que implementa a transação de venda.
- * @author Kiosia
+ * @author Aléxis Kiosia (7152097)
  * @since 30/05/2011
  */
 

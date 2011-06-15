@@ -1,8 +1,12 @@
 import java.util.*;
 import java.io.*;
 
+/**
+ * Classe que define o sistema.
+ * @author Aléxis Kiosia (7152097)
+ * @since 21/05/2011
+ */
 public class Sistema {
-
 	/**
 	 * Método que carrega e/ou cria os arquivos relacionados ao sistema.
 	 */
@@ -108,9 +112,10 @@ public class Sistema {
 	/**
 	 * Variável para leitura do teclado.
 	 */
-	private static Scanner k = new Scanner(System.in);	
+	private static Scanner keyboard = new Scanner(System.in);	
 	
 	/**
+	 * Inicia e roda o sistema.
 	 * @param args Vetor de argumentos passados via console
 	 */
 	public static void main(String[] args) {
@@ -127,7 +132,7 @@ public class Sistema {
 		while(true)
 		{
 			System.out.println("Digite seu nome de usuario: (digite SAIR para sair)");
-			username = k.next();
+			username = keyboard.next();
 			if((username.equals("SAIR"))||(username.equals("sair")))
 			{
 				System.out.println("Obrigado por utilizar o STOC!");
@@ -135,7 +140,7 @@ public class Sistema {
 				return;
 			}
 			System.out.println("Digite sua senha:");
-			password = k.next();
+			password = keyboard.next();
 			aux = User.log(username, password); 
 			if(aux!=null)
 			{
@@ -145,6 +150,10 @@ public class Sistema {
 		}
 	}
 
+	/**
+	 * Método que cria o menu principal e chama as funções necessárias conforme a escolha do usuário. 
+	 * @param logged O usuário que está logado.
+	 */
 	private static void mainMenu(User logged) {
 		int opt = 0;
 		System.out.println("Bem vindo "+logged.getName()+"!");
@@ -157,7 +166,7 @@ public class Sistema {
 				System.out.println("3 - Gerar relatorios");
 				System.out.println("4 - Logout");
 				System.out.println("5 - Sair");
-				opt = k.nextInt();
+				opt = keyboard.nextInt();
 				switch(opt)
 				{
 					case 1 :
@@ -189,7 +198,7 @@ public class Sistema {
 				System.out.println("2 - Trocar senha");
 				System.out.println("3 - Logout");
 				System.out.println("4 - Sair");
-				opt = k.nextInt();
+				opt = keyboard.nextInt();
 				switch(opt)
 				{
 					case 1 :
@@ -212,19 +221,35 @@ public class Sistema {
 		}
 	}
 
+	/**
+	 * Método que cria o menu para relatórios e chama as funções necessárias conforme a escolha do usuário.
+	 * @param logged O usuário que está logado.
+	 */
 	private static void admReport(User logged) {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Método que cria o menu para manutenção e gerenciamento de usuários e chama as funções necessárias conforme a escolha do usuário.
+	 * @param logged O usuário que está logado.
+	 */
 	private static void admUser(User logged) {
 		// TODO Auto-generated method stub
 		logged.edtPass();
 	}
 
+	/**
+	 * Método que cria o menu para gerenciamento de produtos e chama as funções necessárias conforme a escolha do usuário.
+	 * @param logged O usuário que está logado.
+	 */
 	private static void manProd(User logged) {
 		// TODO Auto-generated method stub
 	}
-
+	
+	/**
+	 * Método que cria o menu para manutenção e gerenciamento de produtos e chama as funções necessárias conforme a escolha do usuário.
+	 * @param logged O usuário que está logado.
+	 */
 	private static void admProd(User logged) {
 		// TODO Auto-generated method stub
 	}
