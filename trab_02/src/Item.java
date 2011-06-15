@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 /**
  * Classe que define as bases para os itens que irão compor o estoque.
  * Toda classe de item a ser cadastrado no sistema deve herdar a partir desta classe. 
@@ -27,6 +29,8 @@ public abstract class Item {
 	 */
 	private int qtt;
 
+	public static Vector<Item> vItens = new Vector<Item>();
+	
 	/**
 	 * Construtor que recebe como parâmetros todos os campos. 
 	 * @param name Define o nome do item.
@@ -70,4 +74,27 @@ public abstract class Item {
 	public int getQtt() {
 		return qtt;
 	}
+
+	/**
+	 * Método que procura por um item no vetor de itens.
+	 * @param itemID O código do item que se quer procurar.
+	 * @return Objeto do tipo Item que contém o item encontrado ou null se não encontrar nenhum.
+	 */
+	public static Item findItem(String itemID) {
+		for(int i=0;i<vItens.size();i++)
+		{
+			if(vItens.get(i).code.equals(itemID))
+			{
+				return vItens.get(i);
+			}
+		}
+		System.out.println("Item nao encontrado!");
+		return null;
+	}
+	
+	/**
+	 * Método virtual para carregar o arquivo do tipo de item específico.
+	 */
+	public abstract void loadFile();
+
 }
