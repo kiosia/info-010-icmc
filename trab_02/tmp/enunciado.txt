@@ -1,3 +1,5 @@
+CT2ac8rE2Tp2
+
 Implemente um sistema de controle de estoque que armazene produtos.
 Considere que esse sistema será vendido e demais interessados podem
 estendê-lo, adicionando novos subtipos (ou extensões) de produto ao
