@@ -21,7 +21,6 @@ public class Sistema {
 				String password = inFile.nextLine();
 				boolean adm = inFile.nextLine().equals("1");
 				User user = new User(name, username, password, adm);
-				msg("Leu: "+user.getName()+" que tem "+user.getAdm()+" como adm.");
 				vUsers.add(user);
 			}
 		}
