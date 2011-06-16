@@ -9,7 +9,7 @@ public class Paper extends Item {
 	 * Construtor vazio.
 	 */
 	public Paper(){
-
+		System.out.println("Construtor de papel!");
 	}
 	
 	/**

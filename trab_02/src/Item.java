@@ -1,4 +1,8 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -39,6 +43,11 @@ public abstract class Item {
 	 */
 	public static Vector<Item> vItens = new Vector<Item>();
 
+	/**
+	 * Vetor com as classes de itens suportadas pelo sistema. 
+	 */
+	public static Vector<String> vItemClass = new Vector<String>();
+	
 	/**
 	 * Construtor vazio.
 	 */
@@ -140,6 +149,75 @@ public abstract class Item {
 		return qtt;
 	}
 
+	// TODO COMENTAR E ARRUMAR!
+ 	public static boolean loadFile(boolean newSystem) {
+ 		try
+		{
+			File aux = new File("itm.txt"); 
+			if((aux.exists())&&(!newSystem))
+			{
+				String buffer;
+				Scanner inFile = new Scanner(aux);
+				Item item;
+				String itemType;
+				while(inFile.hasNext())
+				{
+					itemType = inFile.nextLine();
+					Class<?> c = Class.forName(itemType);
+					item = (Item) c.newInstance();
+					item.setCode(inFile.nextLine());
+					item.setName(inFile.nextLine());
+					item.setUnit(inFile.nextLine());
+					buffer = inFile.nextLine();
+					item.setPrice(Double.parseDouble(buffer));
+					buffer = inFile.nextLine();
+					item.setQtt(Integer.parseInt(buffer));
+					if(vItemClass.contains(itemType))
+					{
+						Item.vItens.add(item);
+					}
+					else
+						System.out.println("Arquivo contem item do tipo invalido. Tipo: "+itemType);
+				}
+				inFile.close();
+			}
+			else
+			{
+					aux.createNewFile();
+					System.out.println("Arquivo de itens criado!");
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Erro na leitura dos arquivos de itens!");
+		}
+		return newSystem;
+ 	}	
+	
+ 	// TODO COMENTAR E ARRUMAR!
+ 	public static void saveFile() {
+		try
+		{
+			PrintWriter out  = new PrintWriter(new FileWriter("itm.txt"));
+			for(Item item: Item.vItens)
+			{
+				String itemType = item.getClass().getName();
+				out.println(itemType);
+				out.println(item.getCode());
+				out.println(item.getName());
+				out.println(item.getUnit());
+				out.println(item.getPrice());
+				out.println(item.getQtt());
+			}
+			out.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println("Erro ao salvar arquivo de itens!");
+		}
+ 	}
+ 	
 	/**
 	 * Método para imprimir os dados do item em questão na tela.
 	 */
@@ -167,7 +245,6 @@ public abstract class Item {
 		System.out.println("Item nao encontrado!");
 		return null;
 	}
-
 	
 	/**
 	 * Método que imprime todos os itens cadastrados no sistema.
@@ -178,6 +255,28 @@ public abstract class Item {
 		System.out.println("Existe(m) "+vItens.size()+" transacao(oes)!");
 	}
 
-}
+	/**
+	 * Método que verificar se o item em questão já existe no vetor de itens. Se não existir, adiciona.
+	 */
+	public void addItem() {
+		if(Item.findItem(this.code)!=null)
+		{
+			vItens.add(this);
+		}
+		else
+		{
+			System.out.println("Item com este codigo ja cadastrado!");
+		}
+	}
 
-// TODO fazer mais classes filhas além da Paper
+	/**
+	 * Método que remove o item em questão.
+	 * @param itemCode Objeto do tipo String que representa o código do item que se quer remover.
+	 */
+	public static void delItem(String itemCode) {
+		Item i = Item.findItem(itemCode);
+		if(i!=null)
+			vItens.remove(i);
+	}
+
+}

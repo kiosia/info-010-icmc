@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -27,6 +31,11 @@ public abstract class Transaction {
 	 * Vetor que contém as transações. 
 	 */
 	public static Vector<Transaction> vTransactions = new Vector<Transaction>();
+	
+	/**
+	 * Vetor com as classes de transações suportadas pelo sistema. 
+	 */
+	public static Vector<String> vTranClass = new Vector<String>();
 	
 	/**
 	 * Construtor vazio
@@ -109,6 +118,63 @@ public abstract class Transaction {
 		return User.findUser(this.username);
 	}
 
+	// TODO COMENTAR E ARRUMAR!
+	public static boolean loadFile(boolean newSystem) {
+		try
+		{
+			File aux = new File("trn.txt"); 
+			if((aux.exists())&&(!newSystem))
+			{
+				Scanner inFile = new Scanner(aux);
+				Transaction tran;
+				String tranType, buffer;
+				while(inFile.hasNext())
+				{
+					tranType = inFile.nextLine();
+					Class<?> c = Class.forName(tranType);
+					tran = (Transaction) c.newInstance();
+					tran.setUsername(inFile.nextLine());
+					tran.setItemCode(inFile.nextLine());
+					buffer = inFile.nextLine();
+					tran.setQtt(Integer.parseInt(buffer));
+					Transaction.vTransactions.add(tran);
+				}
+				inFile.close();
+			}
+			else
+			{
+					aux.createNewFile();
+					System.out.println("Arquivo de transacoes criado!");
+			}
+		}
+		catch (Exception e)
+		{
+			System.err.println("Erro na leitura dos arquivos de transacoes!");
+		}
+		return newSystem;
+	}
+
+	// TODO COMENTAR E ARRUMAR!
+	public static void saveFile() {
+		try
+		{
+			PrintWriter out  = new PrintWriter(new FileWriter("trn.txt"));
+			for(Transaction tran: Transaction.vTransactions)
+			{
+				String tranType = tran.getClass().getName();
+				out.println(tranType);
+				out.println(tran.getUsername());
+				out.println(tran.getItemCode());
+				out.println(tran.getQtt());
+			}
+			out.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println("Erro ao salvar arquivo de transacoes!");
+		}
+	}
+	
 	/**
 	 * Método que procura todas as transações relacionadas ao usuário recebido por parâmetro.
 	 * @param username Objeto do tipo User pelo qual se quer pesquisar nas transações.

@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.security.*;
 import java.util.*;
 
@@ -103,11 +106,71 @@ public class User {
 	private void setAdm(boolean adm) {
 		this.adm = adm;
 	}	
-	
+
+	// TODO COMENTAR!
+ 	public static boolean loadFile() {
+ 		boolean newSystem = false;
+ 		try
+		{
+			File aux = new File("usr.txt");
+			if (aux.exists())
+			{
+				String name, username, password;
+				boolean adm;
+				User user;
+				Scanner inFile = new Scanner(aux);
+				while(inFile.hasNext())
+				{
+					name = inFile.nextLine();
+					username = inFile.nextLine();
+					password = inFile.nextLine();
+					adm = inFile.nextLine().equals("1");
+					user = new User(name, username, password, adm, true);
+					User.vUsers.add(user);
+				}
+				inFile.close();
+			}
+			else
+			{
+				aux.createNewFile();
+				newSystem = true; // Se não houver arquivo de usuários, o sistema está comprometido. Refaz-se TODOS os arquivos.
+				System.out.println("Arquivo de usuarios criado!");
+			}
+		}
+		catch (Exception e)
+		{
+			System.err.println("Erro na leitura do arquivo de usuarios!");
+		}
+		return newSystem;
+ 	}
+
+	// TODO COMENTAR!
+ 	public static void saveFile() {
+		try
+		{
+			PrintWriter out = new PrintWriter(new FileWriter("usr.txt"));
+			for(User user: User.vUsers)
+			{
+				out.println(user.getName());
+				out.println(user.getUsername());
+				out.println(user.getPassword());
+				if(user.getAdm())
+					out.println("1");
+				else
+					out.println("0");
+			}
+			out.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println("Erro ao salvar arquivo de usuarios!");
+		}
+ 	}
+ 	
 	/**
 	 * Método para trocar o password do usuário.
 	 */
-	public void edtPass() {
+ 	public void edtPass() {
 		String pass, pass2;
 		System.out.println("Digite sua senha atual:");
 		pass = keyboard.next();

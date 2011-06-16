@@ -12,179 +12,80 @@ public abstract class Sistema {
 	 * Construtor vazio.
 	 */
 	public Sistema(){}
-	
+
 	/**
 	 * Método que carrega e/ou cria os arquivos relacionados ao sistema.
 	 */
- 	public static void loadFiles() {
-		Scanner inFile;
-		String buffer;
-		File aux;
-		boolean newSystem = false;
-		Class<?> c;
+	public static void loadFiles() {
+		loadConfig();
+		boolean newSystem = User.loadFile();
+		newSystem = Item.loadFile(newSystem);
+		Transaction.loadFile(newSystem);
+	}
+	 
+	/**
+	 * Método que carrega o arquivo de configurações. Se este arquivo estiver corrompido, o sistema não é iniciado.
+	 */
+ 	public static void loadConfig() {
 		try
 		{
-			// arquivo de usuários
-			aux = new File("usr.txt");
+			File aux = new File("cfg.txt");
 			if (aux.exists())
 			{
-				inFile = new Scanner(aux);
+				String buffer;
+				Scanner inFile = new Scanner(aux);
 				while(inFile.hasNext())
 				{
-					String name = inFile.nextLine();
-					String username = inFile.nextLine();
-					String password = inFile.nextLine();
-					boolean adm = inFile.nextLine().equals("1");
-					User user = new User(name, username, password, adm, true);
-					User.vUsers.add(user);
+					buffer = inFile.nextLine();
+					if(buffer.equals("Item"))
+					{
+						buffer = inFile.nextLine();
+						while(!buffer.equals("Transaction"))
+						{
+							Item.vItemClass.add(buffer);
+							buffer = inFile.nextLine();
+						}
+						while(inFile.hasNext())
+						{
+							Transaction.vTranClass.add(buffer);
+							buffer = inFile.nextLine();
+						}
+					}
+					else
+					{
+						System.out.println("Sistema corrompido! Entre em contato com o desenvolvedor.");
+						System.exit(0);
+					}
 				}
 				inFile.close();
 			}
 			else
 			{
-				aux.createNewFile();
-				newSystem = true; // Se não houver arquivo de usuários, o sistema está comprometido. Refaz-se TODOS os arquivos.
-				System.out.println("Arquivo de usuarios criado!");
+				// Se não houver arquivo de configurações, o sistema está corrompido e não poderá ser utilizado.
+				System.out.println("Sistema corrompido! Entre em contato com o desenvolvedor.");
+				System.exit(0);
 			}
 		}
 		catch (Exception e)
 		{
-			System.err.println("Erro na leitura do arquivo de usuarios!");
+			System.out.println("Sistema corrompido! Entre em contato com o desenvolvedor.");
+			System.exit(0);
 		}
-		try
+		if((Transaction.vTranClass.size()==0)||(Item.vItemClass.size()==0))
 		{
-			// arquivo de itens
-			aux = new File("itm.txt"); 
-			if((aux.exists())&&(!newSystem))
-			{
-				inFile = new Scanner(aux);
-				Item item;
-				String itemType;
-				while(inFile.hasNext())
-				{
-					itemType = inFile.nextLine();
-					c = Class.forName(itemType);
-					item = (Item) c.newInstance();
-					item.setCode(inFile.nextLine());
-					item.setName(inFile.nextLine());
-					item.setUnit(inFile.nextLine());
-					buffer = inFile.nextLine();
-					item.setPrice(Double.parseDouble(buffer));
-					buffer = inFile.nextLine();
-					item.setQtt(Integer.parseInt(buffer));
-					Item.vItens.add(item);
-				}
-				inFile.close();
-			}
-			else
-			{
-					aux.createNewFile();
-					System.out.println("Arquivo de itens criado!");
-			}
+			System.out.println("Sistema corrompido! Entre em contato com o desenvolvedor.");
+			System.exit(0);
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.err.println("Erro na leitura dos arquivos de itens!");
-		}
-		try
-		{
-			// arquivo de transações
-			aux = new File("trn.txt"); 
-			if((aux.exists())&&(!newSystem))
-			{
-				inFile = new Scanner(aux);
-				Transaction tran;
-				String tranType;
-				while(inFile.hasNext())
-				{
-					tranType = inFile.nextLine();
-					c = Class.forName(tranType);
-					tran = (Transaction) c.newInstance();
-					tran.setUsername(inFile.nextLine());
-					tran.setItemCode(inFile.nextLine());
-					buffer = inFile.nextLine();
-					tran.setQtt(Integer.parseInt(buffer));
-					Transaction.vTransactions.add(tran);
-				}
-				inFile.close();
-			}
-			else
-			{
-					aux.createNewFile();
-					System.out.println("Arquivo de transacoes criado!");
-			}
-		}
-		catch (Exception e)
-		{
-			System.err.println("Erro na leitura dos arquivos de transacoes!");
-		}
-}
+ 	}
 
 	/**
 	 * Método que salva os dados nos arquivos relacionados ao sistema.
 	 */
 	public static void saveFiles ()
 	{
-		PrintWriter out;;
-		try
-		{
-			// arquivo de usuários
-			out  = new PrintWriter(new FileWriter("usr.txt"));
-			for(User user: User.vUsers)
-			{
-				out.println(user.getName());
-				out.println(user.getUsername());
-				out.println(user.getPassword());
-				if(user.getAdm())
-					out.println("1");
-				else
-					out.println("0");
-			}
-			out.close();
-		}
-		catch (Exception e)
-		{
-			System.err.println("Erro ao salvar arquivo de usuarios!");
-		}
-		try
-		{
-			// arquivo de itens
-			out  = new PrintWriter(new FileWriter("itm.txt"));
-			for(Item item: Item.vItens)
-			{
-				String itemType = item.getClass().getName();
-				out.println(itemType);
-				out.println(item.getCode());
-				out.println(item.getName());
-				out.println(item.getUnit());
-				out.println(item.getPrice());
-				out.println(item.getQtt());
-			}
-			out.close();
-		}
-		catch (Exception e)
-		{
-			System.err.println("Erro ao salvar arquivo de itens!");
-		}
-		try
-		{
-			out  = new PrintWriter(new FileWriter("trn.txt"));
-			// arquivo de itens
-			for(Transaction tran: Transaction.vTransactions)
-			{
-				String tranType = tran.getClass().getName();
-				out.println(tranType);
-				out.println(tran.getUsername());
-				out.println(tran.getItemCode());
-				out.println(tran.getQtt());
-			}
-			out.close();
-		}
-		catch (Exception e)
-		{
-			System.err.println("Erro ao salvar arquivo de transacoes!");
-		}
+		User.saveFile();
+		Item.saveFile();
+		Transaction.saveFile();
 	}
 	
 	/**
@@ -275,31 +176,27 @@ public abstract class Sistema {
 		int opt = 0;
 		while(opt!=5)
 		{
-			System.out.println("1 - Verificar produtos cadastrados");
-			System.out.println("2 - Verificar transacoes efetuadas");
-			System.out.println("3 - Verificar transacoes efetuadas por usuario");
-			System.out.println("4 - Verificar transacoes efetuadas por item");
-			System.out.println("5 - Voltar");
+			System.out.println("1 - Verificar transacoes efetuadas");
+			System.out.println("2 - Verificar transacoes efetuadas por usuario");
+			System.out.println("3 - Verificar transacoes efetuadas por item");
+			System.out.println("4 - Voltar");
 			opt = keyboard.nextInt();
 			switch(opt)
 			{
 				case 1 :
-					Item.printAll();
-					break;
-				case 2 :
 					Transaction.printAll();
 					break;
-				case 3 :
+				case 2 :
 					System.out.println("Digite o username do usuario:");
 					String user = keyboard.nextLine();
 					Transaction.listByUser(user);
 					break;
-				case 4 :
+				case 3 :
 					System.out.println("Digite o codigo do produto:");
 					String item = keyboard.nextLine();
 					Transaction.listByItem(item);
 					break;
-				case 5 :
+				case 4 :
 					break;
 				default :
 					System.out.println("Opcao invalida!");
@@ -397,9 +294,103 @@ public abstract class Sistema {
 	 * @param logged O usuário que está logado.
 	 */
 	private static void admProd(User logged) {
-		// TODO addItem() Adiciona item
-		// TODO delItem() Remove item (ao remover, todas as transações relacionadas são apagadas)
-		// TODO edtItem() Edita item (pode-se mudar o nome ou o preço)
+		int opt = 0;
+		while(opt!=5)
+		{
+			System.out.println("1 - Adicionar item");
+			System.out.println("2 - Remover item");
+			System.out.println("3 - Editar item");
+			System.out.println("4 - Exibir itens");
+			System.out.println("5 - Voltar");
+			opt = keyboard.nextInt();
+			switch(opt)
+			{
+				case 1 :
+					createItem();
+					break;
+				case 2 :
+					removeItem();
+					break;
+				case 3 :
+					editItem();
+					break;
+				case 4 :
+					Item.printAll();
+					break;
+				case 5 :
+					break;
+				default :
+					System.out.println("Opcao invalida!");
+			}
+		}
+	}
+
+	/**
+	 * Método que verifica se o usuário quer editar o preço ou o nome do item e direciona para o setter correspondente.
+	 */
+	private static void editItem() {
+		int opt = 0;
+		String buffer;
+		System.out.println("Digite o codigo do item que quer editar:");
+		buffer = keyboard.nextLine();
+		Item i = Item.findItem(buffer);
+		if(i!=null)
+		{
+			while(opt!=3)
+			{
+				System.out.println("1 - Editar nome");
+				System.out.println("2 - Editar preço");
+				System.out.println("3 - Voltar");
+				opt = keyboard.nextInt();
+				switch(opt)
+				{
+					case 1 :
+						System.out.println("Digite o novo nome:");
+						buffer = keyboard.nextLine();
+						i.setName(buffer);
+						break;
+					case 2 :
+						System.out.println("Digite o novo preco:");
+						buffer = keyboard.nextLine();
+						i.setPrice(Double.parseDouble(buffer));
+						break;
+					case 3 :
+						break;
+					default :
+						System.out.println("Opcao invalida!");
+				}
+			}
+		}
+		
+	}
+
+	/**
+	 * Método que remove um item e as transações que o envolvem.
+	 */
+	private static void removeItem() {
+		// TODO Remove um item e as transações que o envolvem.
+		
+	}
+
+	/**
+	 * Método que verifica qual tipo de item o usuário quer criar e chama o addItem da classe.
+	 */
+	private static void createItem() {
+		int i = 0;
+		System.out.println("Selecione o tipo de item que quer criar:");
+		for(String s : Item.vItemClass)
+		{
+			System.out.println(i +" - "+s);
+		}
+		i = keyboard.nextInt();
+		try {
+			Class<?> c = Class.forName(Item.vItemClass.get(i));
+			Item item = (Item) c.newInstance();
+			item.addItem();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erro! Contate o desenvolvedor.");
+		}
 	}
 
 	/**
@@ -439,6 +430,3 @@ public abstract class Sistema {
 	}
 	
 }
-
-// TODO arrumar os loadFile() e saveFile() para aceitar qualquer tipo de Item.
-// vai ter que fazer métodos abstratos em Item para carregar cada tipo de Item.
