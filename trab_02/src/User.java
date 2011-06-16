@@ -107,7 +107,11 @@ public class User {
 		this.adm = adm;
 	}	
 
-	// TODO COMENTAR!
+	/**
+	 * Método que carrega os usuários do arquivo.
+	 * @return Variável do tipo boolean que diz se o arquivo de usuários foi criado do zero (true caso criado).
+	 */
+	
  	public static boolean loadFile() {
  		boolean newSystem = false;
  		try
@@ -144,7 +148,9 @@ public class User {
 		return newSystem;
  	}
 
-	// TODO COMENTAR!
+	/**
+	 * Método que salva o vetor de usuários para o arquivo.
+	 */
  	public static void saveFile() {
 		try
 		{
@@ -303,19 +309,15 @@ public class User {
 			{
 				System.out.println("Usuario atualmente eh admin. Deseja mudar?(S/N)");
 				opt = keyboard.nextLine(); 
-				if((opt.equals("s"))||(opt.equals("S")))
-				{
+				if(opt.toUpperCase().equals("S"))
 					u.setAdm(false);
-				}
 			}
 			else
 			{
 				System.out.println("Usuario atualmente nao eh admin. Deseja mudar?(S/N)");
 				opt = keyboard.nextLine(); 
-				if((opt.equals("s"))||(opt.equals("S")))
-				{
+				if(opt.toUpperCase().equals("S"))
 					u.setAdm(true);
-				}
 			}
 		}
 	}

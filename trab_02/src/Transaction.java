@@ -1,8 +1,5 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.Scanner;
-import java.util.Vector;
+import java.io.*;
+import java.util.*;
 
 /**
  * Classe abstrata que define uma transação.
@@ -12,6 +9,11 @@ import java.util.Vector;
  */
 public abstract class Transaction {
 
+	/**
+	 * Define o verbo que vai aparecer nos menus.
+	 */
+	public String action;
+	
 	/**
 	 * Define o usuário responsável pela transação
 	 */
@@ -118,55 +120,42 @@ public abstract class Transaction {
 		return User.findUser(this.username);
 	}
 
-	// TODO COMENTAR E ARRUMAR!
-	public static boolean loadFile(boolean newSystem) {
+	/**
+	 * Método que carrega as transações do arquivo.
+	 * @param newSystem Variável do tipo boolean que define se o arquivo deve ser criado do zero (true caso deva).
+	 */
+	public static void loadFile(boolean newSystem) {
 		try
 		{
 			File aux = new File("trn.txt"); 
 			if((aux.exists())&&(!newSystem))
 			{
 				Scanner inFile = new Scanner(aux);
-				Transaction tran;
-				String tranType, buffer;
 				while(inFile.hasNext())
-				{
-					tranType = inFile.nextLine();
-					Class<?> c = Class.forName(tranType);
-					tran = (Transaction) c.newInstance();
-					tran.setUsername(inFile.nextLine());
-					tran.setItemCode(inFile.nextLine());
-					buffer = inFile.nextLine();
-					tran.setQtt(Integer.parseInt(buffer));
-					Transaction.vTransactions.add(tran);
-				}
+					vTransactions.add(((Transaction) Class.forName(inFile.nextLine()).newInstance()).loadTran(inFile));
 				inFile.close();
 			}
 			else
 			{
-					aux.createNewFile();
-					System.out.println("Arquivo de transacoes criado!");
+				aux.createNewFile();
+				System.out.println("Arquivo de transacoes criado!");
 			}
 		}
 		catch (Exception e)
 		{
 			System.err.println("Erro na leitura dos arquivos de transacoes!");
 		}
-		return newSystem;
 	}
 
-	// TODO COMENTAR E ARRUMAR!
+	/**
+	 * Método que percorre o vetor de transações e chama a função saveTran() de cada uma delas, salvando-as no arquivo.
+	 */
 	public static void saveFile() {
 		try
 		{
 			PrintWriter out  = new PrintWriter(new FileWriter("trn.txt"));
 			for(Transaction tran: Transaction.vTransactions)
-			{
-				String tranType = tran.getClass().getName();
-				out.println(tranType);
-				out.println(tran.getUsername());
-				out.println(tran.getItemCode());
-				out.println(tran.getQtt());
-			}
+				tran.saveTran(out);
 			out.close();
 		}
 		catch (Exception e)
@@ -221,6 +210,13 @@ public abstract class Transaction {
 			t.printTransaction();
 		System.out.println("Existe(m) "+vTransactions.size()+" transacao(oes)!");
 	}
+
+	/**
+	 * Método que adiciona a transação ao vetor.
+	 */
+	public void addTran() {
+		vTransactions.add(this);
+	}
 	
 	/**
 	 * Método virtual para executar a transação.
@@ -231,5 +227,24 @@ public abstract class Transaction {
 	 * Método virtual que imprime na tela os dados da transação em questão.
 	 */
 	public abstract void printTransaction();
+	
+	/**
+	 * Método virtual para carregar a transação do arquivo.
+	 * @param inFile O arquivo de onde se quer ler.
+	 * @return A transação carregada do arquivo.
+	 */
+	public abstract Transaction loadTran(Scanner inFile);
+	
+	/**
+	 * Método virtual para salvar a transação no arquivo.
+	 * @param out O arquivo para onde se quer salvar.
+	 */
+	public abstract void saveTran(PrintWriter out);
+
+	/**
+	 * Método virtual para coletar dados de uma transação e inserir no vetor.
+	 * @param logged O usuário que efetua a transação.
+	 */
+	public abstract void newTran(User logged);
 	
 }

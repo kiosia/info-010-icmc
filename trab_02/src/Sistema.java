@@ -19,7 +19,7 @@ public abstract class Sistema {
 	public static void loadFiles() {
 		loadConfig();
 		boolean newSystem = User.loadFile();
-		newSystem = Item.loadFile(newSystem);
+		Item.loadFile(newSystem);
 		Transaction.loadFile(newSystem);
 	}
 	 
@@ -47,8 +47,8 @@ public abstract class Sistema {
 						}
 						while(inFile.hasNext())
 						{
-							Transaction.vTranClass.add(buffer);
 							buffer = inFile.nextLine();
+							Transaction.vTranClass.add(buffer);
 						}
 					}
 					else
@@ -102,7 +102,7 @@ public abstract class Sistema {
 		System.out.println("Bem vindo "+logged.getName()+"!");
 		if(logged.getAdm()) // faz o menu caso o usuário seja um administrador
 		{
-			while(opt!=4)
+			while(opt!=5)
 			{
 				System.out.println("1 - Transacoes");
 				System.out.println("2 - Gerenciar produtos");
@@ -111,10 +111,11 @@ public abstract class Sistema {
 				System.out.println("5 - Logout");
 				System.out.println("6 - Sair");
 				opt = keyboard.nextInt();
+				keyboard.nextLine();
 				switch(opt)
 				{
 					case 1:
-						manProd(logged);
+						createTran(logged);
 						break;
 					case 2 :
 						admProd(logged);
@@ -126,7 +127,6 @@ public abstract class Sistema {
 						admReport(logged);
 						break;
 					case 5 :
-						System.out.println("Usuario "+logged.getUsername()+" deslogando...");
 						break;
 					case 6 :
 						System.out.println("Obrigado por utilizar o STOC!");
@@ -149,13 +149,12 @@ public abstract class Sistema {
 				switch(opt)
 				{
 					case 1 :
-						manProd(logged);
+						createTran(logged);
 						break;
 					case 2 :
 						logged.edtPass();
 						break;
 					case 3 :
-						System.out.println("Usuario "+logged.getUsername()+" deslogando...");
 						break;
 					case 4 :
 						System.out.println("Obrigado por utilizar o STOC!");
@@ -164,8 +163,9 @@ public abstract class Sistema {
 					default :
 						System.out.println("Opcao invalida!");
 				}
-			}			
+			}
 		}
+		System.out.println("Usuario "+logged.getUsername()+" deslogando...");
 	}
 
 	/**
@@ -174,13 +174,13 @@ public abstract class Sistema {
 	 */
 	private static void admReport(User logged) {
 		int opt = 0;
-		while(opt!=5)
+		while(opt!=4)
 		{
 			System.out.println("1 - Verificar transacoes efetuadas");
 			System.out.println("2 - Verificar transacoes efetuadas por usuario");
 			System.out.println("3 - Verificar transacoes efetuadas por item");
 			System.out.println("4 - Voltar");
-			opt = keyboard.nextInt();
+			opt = (Integer.parseInt(keyboard.nextLine()));
 			switch(opt)
 			{
 				case 1 :
@@ -202,7 +202,6 @@ public abstract class Sistema {
 					System.out.println("Opcao invalida!");
 			}
 		}
-		
 	}
 
 	/**
@@ -219,7 +218,7 @@ public abstract class Sistema {
 			System.out.println("4 - Editar administradores");
 			System.out.println("5 - Exibir usuarios");
 			System.out.println("6 - Voltar");
-			opt = keyboard.nextInt();
+			opt = (Integer.parseInt(keyboard.nextLine()));
 			switch(opt)
 			{
 				case 1 :
@@ -246,50 +245,6 @@ public abstract class Sistema {
 	}
 
 	/**
-	 * Método que cria o menu para gerenciamento de produtos e chama as funções necessárias conforme a escolha do usuário.
-	 * @param logged O usuário que está logado.
-	 */
-	private static void manProd(User logged) {
-		int opt = 0;
-		String item;
-		Transaction t;
-		int qtt;
-		do
-		{
-			keyboard.nextLine();
-			System.out.println("Digite o codigo do produto:");
-			item = keyboard.nextLine();
-			System.out.println("Digite a quantidade envolvida na transacao:");
-			qtt = keyboard.nextInt();
-		} while(Item.findItem(item)==null);
-		
-		while(opt!=3)
-		{
-			System.out.println("Voce quer...");
-			System.out.println("1 - Vender o produto?");
-			System.out.println("2 - Comprar o produto?");
-			System.out.println("3 - Voltar?");
-			opt = keyboard.nextInt();
-			switch(opt)
-			{
-				case 1 :
-					t = new Sell(logged.getUsername(), item, qtt);
-					t.execute();
-					return;
-				case 2 :
-					t = new Buy(logged.getUsername(), item, qtt);
-					t.execute();
-					return;
-				case 3 :
-					break;
-				default :
-					System.out.println("Opcao invalida!");
-			}
-		}
-		
-	}
-	
-	/**
 	 * Método que cria o menu para manutenção e produtos e chama as funções necessárias conforme a escolha do usuário.
 	 * @param logged O usuário que está logado.
 	 */
@@ -302,7 +257,7 @@ public abstract class Sistema {
 			System.out.println("3 - Editar item");
 			System.out.println("4 - Exibir itens");
 			System.out.println("5 - Voltar");
-			opt = keyboard.nextInt();
+			opt = (Integer.parseInt(keyboard.nextLine()));
 			switch(opt)
 			{
 				case 1 :
@@ -341,7 +296,7 @@ public abstract class Sistema {
 				System.out.println("1 - Editar nome");
 				System.out.println("2 - Editar preço");
 				System.out.println("3 - Voltar");
-				opt = keyboard.nextInt();
+				opt = (Integer.parseInt(keyboard.nextLine()));
 				switch(opt)
 				{
 					case 1 :
@@ -361,32 +316,102 @@ public abstract class Sistema {
 				}
 			}
 		}
-		
 	}
 
 	/**
 	 * Método que remove um item e as transações que o envolvem.
 	 */
 	private static void removeItem() {
-		// TODO Remove um item e as transações que o envolvem.
-		
+		System.out.println("Digite o codigo do item a ser removido:");
+		String code = keyboard.nextLine();
+		System.out.println("Todas as transacoes envolvendo este item serao removidas tambem. Deseja continuar?(S/N)");
+		String opt = keyboard.nextLine(); 
+		if(opt.toUpperCase().equals("S"))
+		{
+			Item item = Item.findItem(code);
+			if(item!=null)
+			{
+				// apagando as transações que envolvem o item
+				for(Transaction tran: Transaction.vTransactions)
+					if(tran.getItemCode().equals(code))
+						Transaction.vTransactions.remove(tran);
+				// apagando o item
+				Item.vItens.remove(item);
+			}
+			else
+			{
+				System.out.println("Impossivel apagar.");
+			}
+		}
+		else
+		{
+			System.out.println("Nenhum item apagado.");
+		}
 	}
-
+	
+	/**
+	 * Método que cria o menu para gerenciamento de produtos e chama as funções necessárias conforme a escolha do usuário.
+	 * @param logged O usuário que está logado.
+	 */
+	private static void createTran(User logged) {
+		int i = 1;
+		int opt = Integer.MAX_VALUE;
+		while(true)
+		{
+			i = 1;
+			System.out.println("Selecione o tipo de transacao que quer efetuar:");
+			for(String s : Transaction.vTranClass)
+			{
+				System.out.println(i +" - "+s);
+				i++;
+			}
+			System.out.println(i +" - Voltar");
+			opt = (Integer.parseInt(keyboard.nextLine()));
+			if(opt==i)
+				return;
+			if(opt>i)
+				System.out.println("Opcao invalida!");
+			else
+				break;
+		}
+		try {
+			Class<?> c = Class.forName(Transaction.vTranClass.get(i-1));
+			Transaction tran = (Transaction) c.newInstance();
+			tran.newTran(logged);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erro! Contate o desenvolvedor.");
+		}
+	}
+	
 	/**
 	 * Método que verifica qual tipo de item o usuário quer criar e chama o addItem da classe.
 	 */
 	private static void createItem() {
-		int i = 0;
-		System.out.println("Selecione o tipo de item que quer criar:");
-		for(String s : Item.vItemClass)
+		int i = 1;
+		int opt = Integer.MAX_VALUE;
+		while(true)
 		{
-			System.out.println(i +" - "+s);
+			i = 1;
+			System.out.println("Selecione o tipo de item que quer criar:");
+			for(String s : Item.vItemClass)
+			{
+				System.out.println(i +" - "+s);
+				i++;
+			}
+			System.out.println(i +" - Voltar");
+			opt = (Integer.parseInt(keyboard.nextLine()));
+			if(opt==i)
+				return;
+			if((opt>i)||(opt<=0))
+				System.out.println("Opcao invalida!");
+			else
+				break;
 		}
-		i = keyboard.nextInt();
 		try {
-			Class<?> c = Class.forName(Item.vItemClass.get(i));
+			Class<?> c = Class.forName(Item.vItemClass.get(i-2));
 			Item item = (Item) c.newInstance();
-			item.addItem();
+			item.newItem();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Erro! Contate o desenvolvedor.");
@@ -425,7 +450,7 @@ public abstract class Sistema {
 			{
 				mainMenu(aux);
 			}
-			saveFiles();
+			saveFiles(); // sistema é salvo toda vez que um usuário desloga.
 		}
 	}
 	

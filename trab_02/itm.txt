@@ -10,3 +10,9 @@ Caderno espiral 5 materias
 un
 12.2
 100
+Paper
+RON12
+Caderno capa mole Ronaldo
+un
+23.3
+24

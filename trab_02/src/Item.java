@@ -1,9 +1,5 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.util.Scanner;
-import java.util.Vector;
+import java.io.*;
+import java.util.*;
 
 /**
  * Classe abstrata que define um item.
@@ -149,67 +145,42 @@ public abstract class Item {
 		return qtt;
 	}
 
-	// TODO COMENTAR E ARRUMAR!
- 	public static boolean loadFile(boolean newSystem) {
+	/**
+	 * Método que carrega os itens do arquivo.
+	 * @param newSystem Variável do tipo boolean que define se o arquivo deve ser criado do zero (true caso deva).
+	 */
+ 	public static void loadFile(boolean newSystem) {
  		try
 		{
 			File aux = new File("itm.txt"); 
 			if((aux.exists())&&(!newSystem))
 			{
-				String buffer;
 				Scanner inFile = new Scanner(aux);
-				Item item;
-				String itemType;
 				while(inFile.hasNext())
-				{
-					itemType = inFile.nextLine();
-					Class<?> c = Class.forName(itemType);
-					item = (Item) c.newInstance();
-					item.setCode(inFile.nextLine());
-					item.setName(inFile.nextLine());
-					item.setUnit(inFile.nextLine());
-					buffer = inFile.nextLine();
-					item.setPrice(Double.parseDouble(buffer));
-					buffer = inFile.nextLine();
-					item.setQtt(Integer.parseInt(buffer));
-					if(vItemClass.contains(itemType))
-					{
-						Item.vItens.add(item);
-					}
-					else
-						System.out.println("Arquivo contem item do tipo invalido. Tipo: "+itemType);
-				}
+					Item.vItens.add(((Item) Class.forName(inFile.nextLine()).newInstance()).loadItem(inFile));
 				inFile.close();
 			}
 			else
 			{
-					aux.createNewFile();
-					System.out.println("Arquivo de itens criado!");
+				aux.createNewFile();
+				System.out.println("Arquivo de itens criado!");
 			}
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 			System.err.println("Erro na leitura dos arquivos de itens!");
 		}
-		return newSystem;
  	}	
 	
- 	// TODO COMENTAR E ARRUMAR!
+	/**
+	 * Método que percorre o vetor de itens e chama a função saveItem() de cada um deles, salvando-os no arquivo.
+	 */
  	public static void saveFile() {
 		try
 		{
 			PrintWriter out  = new PrintWriter(new FileWriter("itm.txt"));
 			for(Item item: Item.vItens)
-			{
-				String itemType = item.getClass().getName();
-				out.println(itemType);
-				out.println(item.getCode());
-				out.println(item.getName());
-				out.println(item.getUnit());
-				out.println(item.getPrice());
-				out.println(item.getQtt());
-			}
+				item.saveItem(out);
 			out.close();
 		}
 		catch (Exception e)
@@ -218,17 +189,6 @@ public abstract class Item {
 		}
  	}
  	
-	/**
-	 * Método para imprimir os dados do item em questão na tela.
-	 */
-	public void printItem() {   
-		DecimalFormat fmt = new DecimalFormat("0.00");    //limita o número de casas decimais     
-		String string = fmt.format(this.price);  
-		String[] part = string.split("[,]");  
-		String price = part[0]+"."+part[1];  
-		System.out.println("Codigo: "+this.code+" Nome: "+this.name+" Preco: "+price+" R$/"+this.unit+" Quantidade em estoque: "+this.qtt);
-	}
-	
 	/**
 	 * Método que procura por um item no vetor de itens.
 	 * @param itemID O código do item que se quer procurar.
@@ -242,7 +202,6 @@ public abstract class Item {
 				return vItens.get(i);
 			}
 		}
-		System.out.println("Item nao encontrado!");
 		return null;
 	}
 	
@@ -256,10 +215,10 @@ public abstract class Item {
 	}
 
 	/**
-	 * Método que verificar se o item em questão já existe no vetor de itens. Se não existir, adiciona.
+	 * Método que verifica se o item em questão já existe no vetor de itens. Se não existir, adiciona.
 	 */
 	public void addItem() {
-		if(Item.findItem(this.code)!=null)
+		if(Item.findItem(this.code)==null)
 		{
 			vItens.add(this);
 		}
@@ -277,6 +236,30 @@ public abstract class Item {
 		Item i = Item.findItem(itemCode);
 		if(i!=null)
 			vItens.remove(i);
+		else
+			System.out.println("Item nao encontrado.");
 	}
 
+	/**
+	 * Método virtual para carregar o item do arquivo.
+	 * @param inFile O arquivo de onde se quer ler.
+	 * @return O item carregado do arquivo.
+	 */
+ 	public abstract Item loadItem(Scanner inFile);
+
+	/**
+	 * Método virtual para salvar o item no arquivo.
+	 * @param out O arquivo para onde se quer salvar.
+	 */
+	public abstract void saveItem(PrintWriter out);	
+ 
+	/**
+	 * Método virtual para imprimir os dados do item em questão na tela.
+	 */
+	public abstract void printItem();
+
+	/**
+	 * Método virtual para coletar dados de um item e inserir no vetor.
+	 */
+	public abstract void newItem();
 }
