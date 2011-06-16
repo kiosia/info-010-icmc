@@ -171,14 +171,12 @@ public abstract class Transaction {
 	 */	
 	public static int listByUser(String username) {
 		int qtt = 0;
-		for(int i=0;i<vTransactions.size();i++)
-		{
-			if(vTransactions.get(i).username == username)
+		for(Transaction t: vTransactions)
+			if(t.username.equals(username))
 			{
-				vTransactions.get(i).printTransaction();
+				t.printTransaction();
 				qtt++;
 			}
-		}
 		System.out.println("Existe(m) "+qtt+" transacao(oes) para este usuario!");
 		return qtt;
 	}
@@ -191,13 +189,11 @@ public abstract class Transaction {
 	public static int listByItem(String itemCode) {
 		int qtt = 0;
 		for(Transaction t: vTransactions)
-		{
-			if(t.itemCode == itemCode)
+			if(t.itemCode.equals(itemCode))
 			{
 				t.printTransaction();
 				qtt++;
 			}
-		}
 		System.out.println("Existe(m) "+qtt+" transacao(oes) para este item!");
 		return qtt;
 	}

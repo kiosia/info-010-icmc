@@ -366,16 +366,16 @@ public abstract class Sistema {
 				i++;
 			}
 			System.out.println(i +" - Voltar");
-			opt = (Integer.parseInt(keyboard.nextLine()));
+			opt = keyboard.nextInt();
 			if(opt==i)
 				return;
-			if(opt>i)
+			if((opt>i)||(opt<=0))
 				System.out.println("Opcao invalida!");
 			else
 				break;
 		}
 		try {
-			Class<?> c = Class.forName(Transaction.vTranClass.get(i-1));
+			Class<?> c = Class.forName(Transaction.vTranClass.get(opt-1)); // subtrai 2 do pois opt vai de 1 ate i
 			Transaction tran = (Transaction) c.newInstance();
 			tran.newTran(logged);
 		} catch (Exception e) {
@@ -409,7 +409,8 @@ public abstract class Sistema {
 				break;
 		}
 		try {
-			Class<?> c = Class.forName(Item.vItemClass.get(i-2));
+			System.out.println(Item.vItemClass.get(i-2)+" "+i);
+			Class<?> c = Class.forName(Item.vItemClass.get(opt-2)); // subtrai 2 do pois opt vai de 1 ate i 
 			Item item = (Item) c.newInstance();
 			item.newItem();
 		} catch (Exception e) {
