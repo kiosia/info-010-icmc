@@ -1,6 +1,13 @@
 import java.util.*;
 import java.io.*;
 
+// TODO exibe items - existe(m) n transacao(oes)
+// TODO exibe usuarios - falta um espaco
+// TODO impossivel executar venda(s)
+// TODO tirar comentario do encode
+// TODO fazer usuario comum listar produtos
+// TODO menu de gerenciamento de usuarios tá zoando com o keyboard.nextLine()
+
 /**
  * Classe abstrata que define o sistema. Não podem haver objetos instanciados desta classe.
  * @author Aléxis Kiosia (7152097)
@@ -409,8 +416,7 @@ public abstract class Sistema {
 				break;
 		}
 		try {
-			System.out.println(Item.vItemClass.get(i-2)+" "+i);
-			Class<?> c = Class.forName(Item.vItemClass.get(opt-2)); // subtrai 2 do pois opt vai de 1 ate i 
+			Class<?> c = Class.forName(Item.vItemClass.get(opt-1)); // subtrai 2 do pois opt vai de 1 ate i 
 			Item item = (Item) c.newInstance();
 			item.newItem();
 		} catch (Exception e) {
@@ -431,6 +437,7 @@ public abstract class Sistema {
 		if(User.vUsers.size()==0) // se não existir nenhum usuário, cadastra o admin
 		{ 
 			aux = new User("Administrador", "admin", "admin", true, false);
+			User.vUsers.add(aux);
 			System.out.println("Primeiro acesso!\nAdministrador criado!\nUsername: admin Password: admin");
 			System.out.println("Troque sua senha assim que possivel!\n");
 		}

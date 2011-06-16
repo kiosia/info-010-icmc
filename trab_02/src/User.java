@@ -299,6 +299,7 @@ public class User {
 	 * @param logged Objeto que representa o usuário que está logado.
 	 */
 	public static void edtAdm(User logged) {
+		keyboard.nextLine();
 		System.out.println("Digite o username do usuario a ser alterado:");
 		User u = User.findUser(keyboard.nextLine());
 		if(logged.username.equals(u.getUsername()))
