@@ -44,7 +44,7 @@ public class User {
 	 * @param username O username que o usuário digitou.
 	 */
 	public User(String username, String password) {
-		this.password = encode(password);
+		this.password = encode(password, username);
 		this.username = username;
 	}	
 	
@@ -59,7 +59,7 @@ public class User {
 	public User(String name, String username, String password, boolean adm, boolean fromFile) {
 		if(!fromFile)
 		{
-			password = encode(password);
+			password = encode(password, username);
 		}
 		this.name = name;
 		this.username = username;
@@ -180,7 +180,7 @@ public class User {
 		String pass, pass2;
 		System.out.println("Digite sua senha atual:");
 		pass = keyboard.next();
-		pass = User.encode(pass);
+		pass = User.encode(pass, this.username);
 		if(!pass.equals(password))
 		{
 			System.out.println("Senha incorreta!");
@@ -194,7 +194,7 @@ public class User {
 			pass2 = keyboard.next();
 			if(pass.equals(pass2))
 			{
-				this.password = encode(pass);
+				this.password = encode(pass, this.username);
 				System.out.println("Senha alterada com sucesso!");
 			}
 			else
@@ -213,11 +213,15 @@ public class User {
 	 * @param pass A senha original.
 	 * @return A senha codificada. 
 	 */
-	public static String encode(String pass) {
+	public static String encode(String pass, String user) {
 		byte[] aux;
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(user);
+		stringBuilder.append(pass);
+		String concat = stringBuilder.toString();
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(pass.getBytes());
+			md.update(concat.getBytes());
 			aux = md.digest();
 		} catch (NoSuchAlgorithmException e) {
 			return null;
@@ -242,7 +246,7 @@ public class User {
 		User user = findUser(username);
 		if(user!=null)
 		{
-			password = encode(password);
+			password = encode(password, username);
 			if(password.equals(user.password))
 			{
 				return user;

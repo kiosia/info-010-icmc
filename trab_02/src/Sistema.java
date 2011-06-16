@@ -453,6 +453,5 @@ public abstract class Sistema {
 			}
 			saveFiles(); // sistema é salvo toda vez que um usuário desloga.
 		}
-	}
-	
+	}	
 }
