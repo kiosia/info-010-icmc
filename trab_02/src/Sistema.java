@@ -1,13 +1,6 @@
 import java.util.*;
 import java.io.*;
 
-// TODO exibe items - existe(m) n transacao(oes)
-// TODO exibe usuarios - falta um espaco
-// TODO impossivel executar venda(s)
-// TODO tirar comentario do encode
-// TODO fazer usuario comum listar produtos
-// TODO menu de gerenciamento de usuarios tá zoando com o keyboard.nextLine()
-
 /**
  * Classe abstrata que define o sistema. Não podem haver objetos instanciados desta classe.
  * @author Aléxis Kiosia (7152097)
@@ -149,9 +142,10 @@ public abstract class Sistema {
 			while(opt!=3)
 			{
 				System.out.println("1 - Transacoes");
-				System.out.println("2 - Trocar senha");
-				System.out.println("3 - Logout");
-				System.out.println("4 - Sair");
+				System.out.println("2 - Listar itens cadastrados");
+				System.out.println("3 - Trocar senha");
+				System.out.println("4 - Logout");
+				System.out.println("5 - Sair");
 				opt = keyboard.nextInt();
 				switch(opt)
 				{
@@ -159,11 +153,14 @@ public abstract class Sistema {
 						createTran(logged);
 						break;
 					case 2 :
-						logged.edtPass();
+						Item.printAll();
 						break;
 					case 3 :
+						logged.edtPass(false);
 						break;
 					case 4 :
+						break;
+					case 5 :
 						System.out.println("Obrigado por utilizar o STOC!");
 						saveFiles();
 						System.exit(0);
@@ -187,7 +184,7 @@ public abstract class Sistema {
 			System.out.println("2 - Verificar transacoes efetuadas por usuario");
 			System.out.println("3 - Verificar transacoes efetuadas por item");
 			System.out.println("4 - Voltar");
-			opt = (Integer.parseInt(keyboard.nextLine()));
+			opt = keyboard.nextInt();
 			switch(opt)
 			{
 				case 1 :
@@ -225,11 +222,11 @@ public abstract class Sistema {
 			System.out.println("4 - Editar administradores");
 			System.out.println("5 - Exibir usuarios");
 			System.out.println("6 - Voltar");
-			opt = (Integer.parseInt(keyboard.nextLine()));
+			opt = keyboard.nextInt();
 			switch(opt)
 			{
 				case 1 :
-					logged.edtPass();
+					logged.edtPass(false);
 					break;
 				case 2 :
 					User.addUser();
@@ -264,7 +261,7 @@ public abstract class Sistema {
 			System.out.println("3 - Editar item");
 			System.out.println("4 - Exibir itens");
 			System.out.println("5 - Voltar");
-			opt = (Integer.parseInt(keyboard.nextLine()));
+			opt = keyboard.nextInt();
 			switch(opt)
 			{
 				case 1 :
@@ -303,7 +300,7 @@ public abstract class Sistema {
 				System.out.println("1 - Editar nome");
 				System.out.println("2 - Editar preço");
 				System.out.println("3 - Voltar");
-				opt = (Integer.parseInt(keyboard.nextLine()));
+				opt = keyboard.nextInt();
 				switch(opt)
 				{
 					case 1 :
@@ -407,7 +404,7 @@ public abstract class Sistema {
 				i++;
 			}
 			System.out.println(i +" - Voltar");
-			opt = (Integer.parseInt(keyboard.nextLine()));
+			opt = keyboard.nextInt();
 			if(opt==i)
 				return;
 			if((opt>i)||(opt<=0))
@@ -438,8 +435,9 @@ public abstract class Sistema {
 		{ 
 			aux = new User("Administrador", "admin", "admin", true, false);
 			User.vUsers.add(aux);
-			System.out.println("Primeiro acesso!\nAdministrador criado!\nUsername: admin Password: admin");
-			System.out.println("Troque sua senha assim que possivel!\n");
+			System.out.println("Primeiro acesso!\nAdministrador criado!");
+			System.out.println("Cadastre sua senha!");
+			aux.edtPass(false);
 		}
 		while(true)
 		{

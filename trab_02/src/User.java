@@ -64,6 +64,10 @@ public class User {
 		this.name = name;
 		this.username = username;
 		this.password = password;
+		if(this.username.equals("admin")) // dessa forma, o usuário admin é SEMPRE administrador, mesmo que o arquivo de usuários seja editado.
+		{
+			this.adm = true;
+		}
 		this.adm = adm;
 	}
 	
@@ -175,42 +179,48 @@ public class User {
  	
 	/**
 	 * Método para trocar o password do usuário.
+	 * @param needPass Variável do tipo boolean que verifica se o usuário necessita do password atual para trocar sua senha.
 	 */
- 	public void edtPass() {
-		String pass, pass2;
-		System.out.println("Digite sua senha atual:");
-		pass = keyboard.next();
-		pass = User.encode(pass, this.username);
-		if(!pass.equals(password))
-		{
-			System.out.println("Senha incorreta!");
-			return;
-		}
-		else
-		{
-			System.out.println("Digite sua nova senha:");
+ 	public void edtPass(boolean needPass) {
+ 		String pass, pass2;
+ 		if(needPass)
+ 		{
+			System.out.println("Digite sua senha atual:");
 			pass = keyboard.next();
-			System.out.println("Digite novamente:");
-			pass2 = keyboard.next();
-			if(pass.equals(pass2))
+			pass = User.encode(pass, this.username);
+			if(!pass.equals(password))
 			{
-				this.password = encode(pass, this.username);
-				System.out.println("Senha alterada com sucesso!");
+				System.out.println("Senha incorreta!");
+				return;
 			}
-			else
-			{
-				System.out.println("As senhas digitadas nao sao as mesmas!");
-			}
-		}
-	}	
+ 		}
+ 		while(true)
+ 		{
+ 			System.out.println("Digite sua nova senha:");
+ 			pass = keyboard.next();
+ 			System.out.println("Digite novamente:");
+ 			pass2 = keyboard.next();
+ 			if(pass.equals(pass2))
+ 			{
+ 				this.password = encode(pass, this.username);
+ 				System.out.println("Senha alterada com sucesso!");
+ 				return;
+ 			}
+ 			else
+ 			{
+ 				System.out.println("As senhas digitadas nao sao as mesmas!");
+ 			}
+ 		}
+	}
 	
 	/**
-	 * Método para codificar a senha.
+	 * Método para codificar a senha. A senha codificada é composta pelo nome do usuário
+	 * concatenada com a senha em si, para que caso o arquivo de usuários seja editado com
+	 * más intenções, as senhas sejam inutilizadas. Ainda há a possibilidade de o 'usuário'
+	 * editar o status de administrador, mas pelo menos as senhas estão seguras.
 	 * Fonte: http://codare.net/2007/02/02/java-gerando-codigos-hash-md5-sha/
-	 * A principio, esta codificação é inútil, visto que o usuário tem acesso ao arquivo,
-	 * podendo assim, trocar seu status de adm ou mesmo a sua senha codificada pela do
-	 * administrador, mas como o tempo é curto, vou deixar assim mesmo.
 	 * @param pass A senha original.
+	 * @param user O username, será usado para compor a senha codificada.
 	 * @return A senha codificada. 
 	 */
 	public static String encode(String pass, String user) {
@@ -291,7 +301,10 @@ public class User {
 	 * Método que imprime na tela os dados do usuário em questão.
 	 */
 	private void print() {
-		System.out.println("Nome: "+this.name+" Username: "+this.username+" Adm:"+this.adm);
+		String aux = "Nao";
+		if(this.adm)
+			aux = "Sim";
+		System.out.println("Nome: "+this.name+" Username: "+this.username+" Adm: "+aux);
 	}
 
 	/**

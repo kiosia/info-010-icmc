@@ -211,7 +211,7 @@ public abstract class Item {
 	public static void printAll() {
 		for(Item i: vItens)
 			i.printItem();
-		System.out.println("Existe(m) "+vItens.size()+" transacao(oes)!");
+		System.out.println("Existe(m) "+vItens.size()+" item(ns)!");
 	}
 
 	/**

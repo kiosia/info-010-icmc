@@ -29,7 +29,7 @@ public class Sell extends Transaction {
 		int oldQtt = item.getQtt();
 		if(oldQtt<this.qtt)
 		{
-			System.out.println("Impossivel exectuar venda! So ha "+oldQtt+" "+item.getUnit()+" deste item em estoque.");
+			System.out.println("Impossivel exectuar venda! Existe(m) "+oldQtt+" "+item.getUnit()+"(s) deste item em estoque.");
 			return;
 		}
 		item.setQtt(oldQtt-this.qtt);
