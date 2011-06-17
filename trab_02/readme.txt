@@ -1,0 +1,1 @@
+The cfg file contains the classes supported by the system. If you extend new classes, you can add them to the file. Otherwise, DON'T MESS WITH IT. By the way, DON'T MESS WITH ANY OF THE FILES, please. Thanks.

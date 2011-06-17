@@ -127,7 +127,7 @@ public abstract class Transaction {
 	public static void loadFile(boolean newSystem) {
 		try
 		{
-			File aux = new File("trn.txt"); 
+			File aux = new File("trn"); 
 			if((aux.exists())&&(!newSystem))
 			{
 				Scanner inFile = new Scanner(aux);
@@ -153,7 +153,7 @@ public abstract class Transaction {
 	public static void saveFile() {
 		try
 		{
-			PrintWriter out  = new PrintWriter(new FileWriter("trn.txt"));
+			PrintWriter out  = new PrintWriter(new FileWriter("trn"));
 			for(Transaction tran: Transaction.vTransactions)
 				tran.saveTran(out);
 			out.close();

@@ -29,7 +29,7 @@ public abstract class Sistema {
  	public static void loadConfig() {
 		try
 		{
-			File aux = new File("cfg.txt");
+			File aux = new File("cfg");
 			if (aux.exists())
 			{
 				String buffer;

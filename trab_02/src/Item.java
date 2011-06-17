@@ -152,7 +152,7 @@ public abstract class Item {
  	public static void loadFile(boolean newSystem) {
  		try
 		{
-			File aux = new File("itm.txt"); 
+			File aux = new File("itm"); 
 			if((aux.exists())&&(!newSystem))
 			{
 				Scanner inFile = new Scanner(aux);
@@ -178,7 +178,7 @@ public abstract class Item {
  	public static void saveFile() {
 		try
 		{
-			PrintWriter out  = new PrintWriter(new FileWriter("itm.txt"));
+			PrintWriter out  = new PrintWriter(new FileWriter("itm"));
 			for(Item item: Item.vItens)
 				item.saveItem(out);
 			out.close();

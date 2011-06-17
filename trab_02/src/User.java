@@ -120,7 +120,7 @@ public class User {
  		boolean newSystem = false;
  		try
 		{
-			File aux = new File("usr.txt");
+			File aux = new File("usr");
 			if (aux.exists())
 			{
 				String name, username, password;
@@ -158,7 +158,7 @@ public class User {
  	public static void saveFile() {
 		try
 		{
-			PrintWriter out = new PrintWriter(new FileWriter("usr.txt"));
+			PrintWriter out = new PrintWriter(new FileWriter("usr"));
 			for(User user: User.vUsers)
 			{
 				out.println(user.getName());
