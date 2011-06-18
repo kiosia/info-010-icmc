@@ -147,6 +147,7 @@ public abstract class Sistema {
 				System.out.println("4 - Logout");
 				System.out.println("5 - Sair");
 				opt = keyboard.nextInt();
+				keyboard.nextLine();
 				switch(opt)
 				{
 					case 1 :
@@ -177,7 +178,7 @@ public abstract class Sistema {
 	 * @param logged O usuário que está logado.
 	 */
 	private static void admReport(User logged) {
-		int opt = 0;
+		Integer opt = 0;
 		while(opt!=4)
 		{
 			System.out.println("1 - Verificar transacoes efetuadas");
@@ -185,6 +186,7 @@ public abstract class Sistema {
 			System.out.println("3 - Verificar transacoes efetuadas por item");
 			System.out.println("4 - Voltar");
 			opt = keyboard.nextInt();
+			keyboard.nextLine();
 			switch(opt)
 			{
 				case 1 :
@@ -223,6 +225,7 @@ public abstract class Sistema {
 			System.out.println("5 - Exibir usuarios");
 			System.out.println("6 - Voltar");
 			opt = keyboard.nextInt();
+			keyboard.nextLine();
 			switch(opt)
 			{
 				case 1 :
@@ -262,6 +265,7 @@ public abstract class Sistema {
 			System.out.println("4 - Exibir itens");
 			System.out.println("5 - Voltar");
 			opt = keyboard.nextInt();
+			keyboard.nextLine();
 			switch(opt)
 			{
 				case 1 :
@@ -301,6 +305,7 @@ public abstract class Sistema {
 				System.out.println("2 - Editar preço");
 				System.out.println("3 - Voltar");
 				opt = keyboard.nextInt();
+				keyboard.nextLine();
 				switch(opt)
 				{
 					case 1 :
@@ -371,6 +376,7 @@ public abstract class Sistema {
 			}
 			System.out.println(i +" - Voltar");
 			opt = keyboard.nextInt();
+			keyboard.nextLine();
 			if(opt==i)
 				return;
 			if((opt>i)||(opt<=0))
@@ -379,7 +385,7 @@ public abstract class Sistema {
 				break;
 		}
 		try {
-			Class<?> c = Class.forName(Transaction.vTranClass.get(opt-1)); // subtrai 2 do pois opt vai de 1 ate i
+			Class<?> c = Class.forName(Transaction.vTranClass.get(opt-1)); // subtrai 1 do pois opt vai de 1 ate i
 			Transaction tran = (Transaction) c.newInstance();
 			tran.newTran(logged);
 		} catch (Exception e) {
@@ -405,6 +411,7 @@ public abstract class Sistema {
 			}
 			System.out.println(i +" - Voltar");
 			opt = keyboard.nextInt();
+			keyboard.nextLine();
 			if(opt==i)
 				return;
 			if((opt>i)||(opt<=0))
@@ -413,7 +420,7 @@ public abstract class Sistema {
 				break;
 		}
 		try {
-			Class<?> c = Class.forName(Item.vItemClass.get(opt-1)); // subtrai 2 do pois opt vai de 1 ate i 
+			Class<?> c = Class.forName(Item.vItemClass.get(opt-1)); // subtrai 1 do pois opt vai de 1 ate i 
 			Item item = (Item) c.newInstance();
 			item.newItem();
 		} catch (Exception e) {
@@ -442,7 +449,7 @@ public abstract class Sistema {
 		while(true)
 		{
 			System.out.println("Digite seu nome de usuario: (digite SAIR para sair)");
-			username = keyboard.next();
+			username = keyboard.nextLine();
 			if((username.equals("SAIR"))||(username.equals("sair")))
 			{
 				System.out.println("Obrigado por utilizar o STOC!");
@@ -450,7 +457,7 @@ public abstract class Sistema {
 				return;
 			}
 			System.out.println("Digite sua senha:");
-			password = keyboard.next();
+			password = keyboard.nextLine();
 			aux = User.log(username, password); 
 			if(aux!=null)
 			{
